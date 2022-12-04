@@ -109,9 +109,9 @@ function App() {
       error={userQuery.error}
       isError={userQuery.isError}
       isLoading={userQuery.isLoading}>
-      <div className="w-full h-screen  overflow-y-hidden dark:bg-slate-900
+      <div className="overflow-scroll dark:bg-slate-900 h-full max-h-screen
        dark:text-white dark:shadow-white">
-        <RouterProvider router={router} />;
+        <RouterProvider router={router} />
       </div>
     </QueryStateWrapper>
   )

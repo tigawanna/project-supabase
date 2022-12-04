@@ -41,14 +41,35 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
     const [error, setError] = React.useState({ name: "", error: "" });
     const [mainH, setMainH] = React.useState(window?.innerHeight ?? 0);
     const [ref, top] = useMeasure();
+      interface BillFromRPC {
+        tenant_id: string;
+        shop_id: string;
+        current_bill_id?: string;
+        prev_bill_id?: string;
+        shop_number: string;
+        shop_name: string;
+        list_order: number;
+        prev_elec?: number;
+        curr_elec?: number;
+        elec_diff?: number;
+        prev_water?: number;
+        curr_water?: number;
+        water_diff?: number;
+        current_month?: number;
+        previous_month?: number;
+        current_year?: number;
+        previous_year?: number;
+    }
+
 
     const header = [
-        { name: "ID", prop: "id", type: "text", editable: true },
-        { name: "Name", prop: "name", type: "text", editable: true },
-        { name: "Email", prop: "email", type: "text", editable: true },
-        { name: "Gender", prop: "gender", type: "text", editable: true },
-        { name: "Date", prop: "date", type: "date", editable: true },
-        { name: "Amount", prop: "amount", type: "number", editable: true },
+        { name: "SHOP ID", prop: "shop_id", type: "id", editable: false },
+        { name: "SHOP NAME", prop: "shop_name", type: "text", editable: false },
+        { name: "PREV WTR", prop: "prev_water", type: "number", editable: true },
+        { name: "CURR WTR", prop: "curr_water", type: "number", editable: true },
+        { name: "PREV EL", prop: "prev_elec", type: "number", editable: true },
+        { name: "CURR EL", prop: "curr_elec", type: "number", editable: true },
+
     ]
 
 
@@ -98,24 +119,16 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
     };
 
     const query = useQuery(['billsfromrpc', 12, 10], () => get_bills_rpc(12, 11, 2022, 2022))
-    const bills = []
-    
+    const bills = query.data
+    console.log("bills ==>>",bills)    
 
   return (
-  <div className='w-full h-full flex flex-col items-center  '>
+      <div className='w-full h-full flex flex-col items-center overflow-y-scroll'>
           
 
-        <div
-            style={{
-                // top: `${top.height + 50}px`,
-                // height: `${bottomHeight}%`,
-                // bottom: "0px",
-            }}
-            className="absolute  w-[95%]   left-[2%] right-[2%] 
-             scrollbar-thin hover:scrollbar-thumb-purple-400 overflow-hidden"
-        >
+        <div className="w-full ">
               <div
-               className=" w-fit p-2 bg-slate-900 text-white flex gap-2 
+                  className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
                left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
                   <TheIcon Icon={FaPrint} 
                   size='20'
@@ -124,29 +137,31 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
                           state: {
                               rows: bills,
                               header,
-                              title: `payments for ${bills[0]?.month}`
+                              title: `payments for ${bills&&bills[0]?.current_month}`
                           },
                       })
                   }} />
                   <TheIcon Icon={FaRegEdit} size='20' 
                   iconAction={() => setUpdate(prev => !prev)} />
               </div>
+     
             <TheTable
 
-                rows={query.data}
+                rows={bills}
                 header={header}
                 loading={query.isLoading}
                 // error={error}
                 // sort={false}
-                // update={update}
+                update={update}
                 // validate={validate}
                 // saveChanges={saveChanges}
                 // deleteRow={deleteRow}
                 // clearError={clearError}
             />
+      
             <div className="p-2 mb-2 min-w-20"></div>
         </div>
  </div>
-);
+)
 }
 

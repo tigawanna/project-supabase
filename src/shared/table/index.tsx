@@ -12,7 +12,7 @@ import { Loader } from './components/tableparts/Loader';
 
 
 export interface TheTableProps {
-  rows:any[]
+  rows?:any[]
   header:{name:string,prop:string,type:string,editable:boolean}[]
 
   //optional props use ?. for fuctions before invoking them
@@ -173,11 +173,11 @@ export interface TheTableProps {
   
   
   return (
-    <div className="w-[98%] h-full relative top-0">
-      <div className={loading?"h-[70%]":"h-fit"}>
+    <div className="w-[100%]  h-fit ">
+      <div className="h-fit">
         <table border={1} 
-        className={"table-auto w-full"}>
-          <thead className="p-7 w-screen sticky top-0 h-16">
+          className={"table-auto w-full "}>
+          <thead className="p-7 w-full sticky top-0 h-16">
             <IconContext.Provider
               value={{
                 size: "20px",
@@ -213,7 +213,7 @@ export interface TheTableProps {
               </tr>
             </IconContext.Provider>
           </thead>
-          <tbody className={"h-full"}>
+          <tbody className={"h-full overflow-scroll"}>
             {data &&
               data.map((dataitem: Object, dataindex: number) => {
                 return mainRow(

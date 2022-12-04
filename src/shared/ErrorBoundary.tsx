@@ -31,7 +31,7 @@ class ErrorBoundary extends Component<Props, State> {
         console.log("error boundary =",this.state.error?.message)
         if (this.state.hasError) {
           return(
-                <div className="w-full min-h-screen h-full flex-center">
+                <div className="w-full h-screen  flex-center ">
                     <div className="w-[50%] p-2 flex-center bg-red-100 text-red-600">
                      {this.state.error?.message}
                    </div>

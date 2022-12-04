@@ -31,12 +31,12 @@ export class PrintThis extends React.Component<MyProps, MyState> {
     render() {
 
       return (
-        <div className='m-5 text-black'>
-         <div  className="capitaliza text-xl font-bold m-1">{this.state.title}</div> 
+        <div className='m-5 '>
+         <div  className="capitaliza text-[15px]  m-1">{this.state.title}</div> 
         <TheTable
          rows={this.state.rows}
          header={this.state.header}
-          />
+        />
       </div>
       );
     }

@@ -62,14 +62,15 @@ if(type === "id"){
 const currentlyEditing = editIdx === index;
   return (
     <tr 
-  key={index} className="">
+     key={index} className="">
     {/* table cell */}
     {header.map((head, index) => {
       addItemId(item,head.prop,head.type)
     
       return (
         <td
-        className="border-slate-800 border-2 text-center p-1 "
+          style={{ maxWidth:head.type === "id"?"1.5rem":"" }}
+        className="border-slate-800 border text-center p-[1px] truncate"
           key={
             
             head.prop + item[head.prop]
@@ -78,7 +79,7 @@ const currentlyEditing = editIdx === index;
           {currentlyEditing&&head.editable ? (
             <div>
               <input
-                className="w-full border-red-900 border-2 text-center "
+                className="w-full border-red-900 border text-center "
                 id={head.prop}
                 name={head.prop}
                 onChange={(e) => handleChange(e, head.prop, index)}
