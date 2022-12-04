@@ -7,7 +7,7 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  
+  overflow-y:hidden ;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -24,4 +24,8 @@
 }
 .flex-col-center{
   @apply flex flex-col justify-center items-center
+}
+
+.test-scroll{
+    @apply scrollbar-thin hover:scrollbar-thumb-green-400 scrollbar-track-red-400
 }

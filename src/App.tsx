@@ -14,7 +14,7 @@ import { Login } from './pages/auth/Login';
 import { Signup } from './pages/auth/Signup';
 import { WelcomePage } from './pages/index/WelcomePage';
 import { getUser, supabase } from './supa/config';
-import { User } from './supa/types';
+import { User } from './supa/user-types';
 import { BillsLayout } from './pages/bills/BillsLayout';
 import { Bills } from './pages/bills/Bills';
 import { PrintPreview } from './shared/Print/PrintPreview';
@@ -109,7 +109,7 @@ function App() {
       error={userQuery.error}
       isError={userQuery.isError}
       isLoading={userQuery.isLoading}>
-      <div className="w-full h-screen scroll-bar overflow-y-hidden dark:bg-slate-900
+      <div className="w-full h-screen  overflow-y-hidden dark:bg-slate-900
        dark:text-white dark:shadow-white">
         <RouterProvider router={router} />;
       </div>

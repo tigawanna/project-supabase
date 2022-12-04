@@ -1,11 +1,12 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react'
 import { FaPlus, FaRegCreditCard, FaTimes, FaPrint, FaRegEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import useMeasure from 'react-use-measure';
 import { TheTable } from '../../shared/table';
 import { TheIcon } from '../../shared/TheIcon';
-import { User } from '../../supa/types';
+import { get_bills_rpc } from '../../supa/operations';
+import { User } from '../../supa/user-types';
 import { mockdata } from './../../shared/data';
 
 interface BillsProps {
@@ -95,23 +96,27 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
     const clearError = () => {
     setError({ name: "", error: "" });
     };
-   const bills =mockdata
+
+    const query = useQuery(['billsfromrpc', 12, 10], () => get_bills_rpc(12, 11, 2022, 2022))
+    const bills = []
+    
 
   return (
-  <div className='w-full h-full flex flex-col items-center'>
+  <div className='w-full h-full flex flex-col items-center  '>
           
 
         <div
             style={{
-                top: `${top.height + 50}px`,
-                height: `${bottomHeight}%`,
-                bottom: "0px",
+                // top: `${top.height + 50}px`,
+                // height: `${bottomHeight}%`,
+                // bottom: "0px",
             }}
-            className="absolute  w-[95%]  overflow-scroll left-[2%] right-[2%]
-             scrollbar-thin scrollbar-thumb-purple-400 px-2 "
+            className="absolute  w-[95%]   left-[2%] right-[2%] 
+             scrollbar-thin hover:scrollbar-thumb-purple-400 overflow-hidden"
         >
               <div
-               className=" w-fit p-2 bg-slate-900 text-white flex gap-2 left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
+               className=" w-fit p-2 bg-slate-900 text-white flex gap-2 
+               left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
                   <TheIcon Icon={FaPrint} 
                   size='20'
                   iconAction={() => {
@@ -123,19 +128,21 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
                           },
                       })
                   }} />
-                  <TheIcon Icon={FaRegEdit} size='20' iconAction={() => setUpdate(prev => !prev)} />
+                  <TheIcon Icon={FaRegEdit} size='20' 
+                  iconAction={() => setUpdate(prev => !prev)} />
               </div>
             <TheTable
 
-                rows={mockdata}
+                rows={query.data}
                 header={header}
-                error={error}
-                sort={false}
-                update={update}
-                validate={validate}
-                saveChanges={saveChanges}
-                deleteRow={deleteRow}
-                clearError={clearError}
+                loading={query.isLoading}
+                // error={error}
+                // sort={false}
+                // update={update}
+                // validate={validate}
+                // saveChanges={saveChanges}
+                // deleteRow={deleteRow}
+                // clearError={clearError}
             />
             <div className="p-2 mb-2 min-w-20"></div>
         </div>

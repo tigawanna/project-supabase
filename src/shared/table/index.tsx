@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 
-
+import './components/table.css' 
 import { useCountdownTimer } from 'use-countdown-timer';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
@@ -8,13 +8,17 @@ import { mainRow } from './components/tableparts/tableRows';
 import { UndoModal } from './components/tableparts/UndoModal';
 import { tymeToDate } from './components/TheTable/utils/utils';
 import { Tyme } from './components/TheTable/utils/types';
+import { Loader } from './components/tableparts/Loader';
 
 
 export interface TheTableProps {
   rows:any[]
   header:{name:string,prop:string,type:string,editable:boolean}[]
 
-  //optional props use ?. for fuctions before invoking them 
+  //optional props use ?. for fuctions before invoking them
+  loading?:boolean;
+  loadingError?:string
+
   update?:boolean
   sort?:boolean
   error?:{name:string,error:string}
@@ -29,10 +33,12 @@ export interface TheTableProps {
   export const TheTable: React.FC<TheTableProps> = (
   {
     rows,
+    header,
     error,
+    loading=false,
+    loadingError="",
     update=false,
     sort=false,
-    header,
     validate,
     saveChanges,
     deleteRow,
@@ -167,9 +173,10 @@ export interface TheTableProps {
   
   
   return (
-    <div className="w-full h-full relative top-0">
-      <div className="h-fit">
-        <table border={1} className="table-auto w-full ">
+    <div className="w-[98%] h-full relative top-0">
+      <div className={loading?"h-[70%]":"h-fit"}>
+        <table border={1} 
+        className={"table-auto w-full"}>
           <thead className="p-7 w-screen sticky top-0 h-16">
             <IconContext.Provider
               value={{
@@ -206,7 +213,7 @@ export interface TheTableProps {
               </tr>
             </IconContext.Provider>
           </thead>
-          <tbody className="h-full">
+          <tbody className={"h-full"}>
             {data &&
               data.map((dataitem: Object, dataindex: number) => {
                 return mainRow(
@@ -224,8 +231,11 @@ export interface TheTableProps {
                   error
                 );
               })}
+       
           </tbody>
+
         </table>
+        {loading?<Loader/>:null}
         {/* undo butto to restore removed row after edit */}
         {countdown !== 5000 ? (
           <div
@@ -241,3 +251,7 @@ export interface TheTableProps {
   );
   }
   
+
+
+
+

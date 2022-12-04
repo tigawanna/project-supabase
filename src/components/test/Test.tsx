@@ -1,8 +1,10 @@
 import React from 'react'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { get_all_shops } from './../../supa/operations';
+import { get_all_shops, get_bills_rpc } from './../../supa/operations';
 import { QueryStateWrapper } from '../../shared/QueryStateWrapper';
+import { BillFromRPC } from './../../supa/query-types';
+import { supabase } from '../../supa/config';
 
 
 interface TestProps {
@@ -23,16 +25,20 @@ export const Test: React.FC<TestProps> = ({}) => {
         tenants:{ tenant_name: string }
     }
 
-const query = useQuery(['shops'],get_all_shops,{
-    // enabled:false
-    // select:(data:Shops[])=>{
-    //  return data.map((da)=>{
-    //   da['shop_name']=da.tenants.tenant_name
-    //    return da
-    //  })
-    // }
-})    
+//     const query = useQuery<BillFromRPC[], unknown, BillFromRPC, (string|number)[]>(['bills',12,11],
+//     get_bills_rpc,{
+//     // enabled:false
+//     // select:(data:Shops[])=>{
+//     //  return data.map((da)=>{
+//     //   da['shop_name']=da.tenants.tenant_name
+//     //    return da
+//     //  })
+//     // }
+// })    
 
+
+
+const query = useQuery(['billsfromrpc',12,10],()=>get_bills_rpc(12,11,2022,2022))
 console.log("data ===>",query.data)  
 // fixBills()
 return (

@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { OauthSignIn } from "../../components/auth/OauthSignIn";
-import { User } from "../../supa/types";
+import { User } from "../../supa/user-types";
 
 interface LoginProps {
 user?:User|null

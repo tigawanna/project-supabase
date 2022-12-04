@@ -1,17 +1,18 @@
 import { supabase } from "./config";
+import { BillFromRPC } from "./query-types";
 
 export const get_all_shops=async()=>{
   try{
    let { data: shops, error } = await supabase
-     .from("bills")
+     .from("shops")
      .select(
-       `
-     id,bills(
-      id
-    )
+       ` id,
+        bills(
+          shop
+       )
      `
      )
-     .eq("month", 1)
+  
      .range(0, 9);
   
   ;
@@ -26,6 +27,39 @@ export const get_all_shops=async()=>{
   } 
 
 }
+
+
+
+export const get_bills_rpc = async (
+      curr_month: number,
+      prev_month: number,
+      curr_year:number,
+      prev_year:number
+      
+    ) => {
+      // const [_, curr_month, prev_month] = queryKey;
+      try {
+        let { data, error } = await supabase.rpc(
+          "get_bills",
+          {
+            curr_month,
+            curr_year,
+            prev_month,
+            prev_year,
+          }
+        );
+        if (error) {
+          throw error;
+        }
+        return data as BillFromRPC[];
+      } catch (e) {
+        console.log(
+          "error fetching shops ==== ",
+          e
+        );
+        throw e;
+      }
+    }; 
 
 
 

@@ -3,7 +3,7 @@ import ReactToPrint from 'react-to-print';
 import { PrintThis } from './Printme';
 import { FaPrint } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
-import { User } from '../../supa/types';
+import { User } from '../../supa/user-types';
 
 
 interface PrintPreviewTypes{

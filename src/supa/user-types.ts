@@ -52,3 +52,4 @@ export interface IdentityData {
   provider_id: string;
   sub: string;
 }
+

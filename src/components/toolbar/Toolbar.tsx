@@ -1,5 +1,5 @@
 import React from "react";
-import { User } from "./../../supa/types";
+import { User } from "../../supa/user-types";
 import { useTheme } from "./../../shared/hooks/themeHook";
 import {
   BsSunFill,

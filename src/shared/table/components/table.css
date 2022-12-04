@@ -1,0 +1,116 @@
+.table-loading{
+    width: 100%;
+    table-layout: auto;
+    background-color: red;
+}
+
+.animate-border{
+ border: 2px solid #a703a7;
+ animation: draw_border 5s ease-in;
+  animation-iteration-count: infinite;
+ animation-direction: alternate;
+}
+
+
+@keyframes draw_border{
+    100%{
+    border-color: rgb(239, 22, 247);
+    border-width: 2px 9px 2px 0px;
+
+    }
+    70%{
+    border-color: rgb(142, 29, 146);
+    border-width: 0px 2px 0px 2px;
+
+    }
+    50%{
+    border-color: rgb(232, 54, 238);
+    border-width: 2px 0px 2px 0px;
+
+    }
+    30%{
+    border-color: rgb(133, 55, 136);
+    border-width: 0px 2px 0px 2px;
+
+    }
+    10%{
+    border-color: rgb(229, 131, 233);
+    border-width: 2px 0px 2px 0px;
+
+    }
+    to{
+     border-color: purple;
+      border-width: 2px 2px 2px 2px;
+    }
+}
+
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgb(214, 40, 177);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+
+
+/* @media (prefers-color-scheme: dark) {
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgb(173, 82, 209);
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+} */
