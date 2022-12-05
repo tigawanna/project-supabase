@@ -208,7 +208,7 @@ export interface TheTableProps {
                     );
                   })}
                 {update ? (
-                  <th className=" bg-slate-900 text-white opacity-100">Edit</th>
+                  <th className=" bg-slate-900 text-white p-2 border">Edit</th>
                 ) : null}
               </tr>
             </IconContext.Provider>

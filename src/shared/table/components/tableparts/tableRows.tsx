@@ -79,7 +79,7 @@ const currentlyEditing = editIdx === index;
           {currentlyEditing&&head.editable ? (
             <div>
               <input
-                className="w-full border-red-900 border text-center "
+                className="w-full p-1 border border-purple-400 rounded-md text-center bg-slate-700 text-white"
                 id={head.prop}
                 name={head.prop}
                 onChange={(e) => handleChange(e, head.prop, index)}
@@ -101,9 +101,9 @@ const currentlyEditing = editIdx === index;
     })}
 
     {update ? (
-      <td className="border-slate-800 border-2 p-1 ">
+      <td className="border-slate-800 border p-1  ">
         <IconContext.Provider
-          value={{ size: "20px",className:"mx-[2px] sm:opacity-50 hover:opacity-100 text-black"  }}
+          value={{ size: "20px",className:"mx-[2px] sm:opacity-50 hover:opacity-100 "  }}
         >
           <div className=" w-full  flex justify-center items-center">
           {currentlyEditing ? (

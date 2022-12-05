@@ -6,6 +6,7 @@ import { QueryStateWrapper } from '../../shared/QueryStateWrapper';
 import { LoaderSpinner, LoaderElipse } from './../../shared/loaders/Loaders';
 import { ShopsType } from '../../supa/query-types';
 import { DivList } from '../../shared/lists/DivList';
+import { ShopCard } from '../../components/shops/ShopCard';
 interface ShopsProps {
 
 }
@@ -25,14 +26,7 @@ export interface opsType {
 export const Shops: React.FC<ShopsProps> = ({}) => {
 const query = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(['shops'],get_shops)
 
-const header = [
-   {name:'ID',prop:'id',type:'text'},
-   { name: 'Created At', prop: 'created_at', type: 'text' },
-   { name: 'Shop Name', prop: 'tenants.tenant_name', type: 'sub-text' },
-   { name: 'Water', prop: 'has_water', type: 'boolean' },
-   { name: 'Elec', prop: 'has_elec', type: 'boolean' },
-   { name: 'Vacant', prop: 'is_vacant', type:'boolean' },
-]
+
 
 const shops = query.data
 console.log("shops === ",shops)
@@ -46,9 +40,17 @@ return (
 error={query.error}
 isError={query.isError}
 isLoading={query.isLoading}
-loader={<LoaderElipse/>}
->
-<DivList header={header} list={shops}/>
+loader={<LoaderElipse/>}>
+<div className='w-full h-[80%] p-2 flex flex-wrap items-center justify-center 
+overflow-scroll gap-2'>
+{
+   shops&&shops.map((shop)=>{
+      return(
+         <ShopCard shop={shop} key={shop.id}/>
+      )
+   })
+}
+</div>
 </QueryStateWrapper>
 
  </div>

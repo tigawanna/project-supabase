@@ -66,13 +66,16 @@ export const get_bills_rpc = async (
     export const get_shops = async () => {
       try {
         let { data: shops, error } =
-          await supabase.from("shops").select(
-            ` *,
+          await supabase
+            .from("shops")
+            .select(
+              ` *,
               tenants(
                   tenant_name
                 )
              `
-          );
+            )
+            .order("order");
         if (error) {
           throw error;
         }
