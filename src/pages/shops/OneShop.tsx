@@ -10,6 +10,7 @@ import { LoaderElipse } from '../../shared/loaders/Loaders';
 import { TheTable } from '../../shared/table';
 import { FaPrint, FaRegEdit } from 'react-icons/fa';
 import { TableWrapper } from '../../shared/TableWrapper';
+import useMeasure from 'react-use-measure';
 interface OneShopProps {
 
 }
@@ -31,6 +32,7 @@ export const OneShop: React.FC<OneShopProps> = ({}) => {
 const params = useParams<ParamsT>();
 const navigate = useNavigate();
 const [update, setUpdate] = React.useState(true);
+const [ref, top] = useMeasure();
 
 const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(
     ['shops'],get_shops,
@@ -47,7 +49,7 @@ const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, stri
 const query = useQuery<ShopBills[] | null, unknown, ShopBills[] | null, string[]>(
 ['shops-bills',params.shop as string], ()=>get_one_shop(params?.shop as string))
 
-console.log("params === ",params)
+console.log("params === ",top)
 console.log("bills === ",query.data)
 
     const header = [
@@ -61,28 +63,63 @@ console.log("bills === ",query.data)
     ]
 const bills = query.data
 return (
-  <div className="w-full h-full overflow-scroll">
+  <div className="w-full h-full overflow-y-scroll ">
     <QueryStateWrapper
       error={shopquery.error}
       isError={shopquery.isError}
       isLoading={shopquery.isLoading}
       loader={<LoaderElipse />}
     >
+     <div 
+     ref={ref}
+     className="w-full  m-1 p-2 bg-purple-700
+      rounded-xl sticky top-1 z-40 
+     ">
       <OneShopInfo the_shops={shopquery.data} />
+
+      </div>
+   
+
     </QueryStateWrapper>
 
 
-            <div className="w-full p-4 overflow-scroll">
-            <TableWrapper
-                header={header}
-                print_msg={"hey"}
-                rows={bills as any[]}
-                loading={query.isLoading}
-      
-
-            />
+        <div className="w-full p-2">
+            <div
+                className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
+               left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
+                <TheIcon Icon={FaPrint}
+                    size='20'
+                    iconAction={() => {
+                        navigate("/print-preview", {
+                            state: {
+                                rows: bills,
+                                header,
+                                title: `payments for ${bills && bills[0]?.month}`
+                            },
+                        })
+                    }} />
+                <TheIcon Icon={FaRegEdit} size='20'
+                    iconAction={() => setUpdate(prev => !prev)} />
             </div>
- 
+
+            <TheTable
+
+                rows={bills as any[]}
+                header={header}
+                loading={query.isLoading}
+                top={top.height+20}
+                // error={error}
+                // sort={false}
+                update={update}
+            // validate={validate}
+            // saveChanges={saveChanges}
+            // deleteRow={deleteRow}
+            // clearError={clearError}
+            />
+
+            <div className="p-2 mb-2 min-w-20"></div>
+        </div>
+  
 
   </div>
 );

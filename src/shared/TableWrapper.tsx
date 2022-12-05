@@ -7,6 +7,7 @@ import { useState } from 'react';
 interface TableWrapperProps {
 
     rows: any[];
+    top?:number;
     header: {
         name: string;
         prop: string;
@@ -26,7 +27,7 @@ interface TableWrapperProps {
 
 export const TableWrapper: React.FC<TableWrapperProps> = (
     { header, rows, loading, print_msg,
-
+top,
         loadingError,
         sort,
         error,
@@ -39,7 +40,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = (
     const [update, setUpdate] = useState(true);
   
     return (
-        <div className="w-full p-4 overflow-scroll">
+        <div className="w-full p-4 overflow-y-scroll">
             <div
                 className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
                left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
@@ -62,6 +63,7 @@ export const TableWrapper: React.FC<TableWrapperProps> = (
 
                 rows={rows}
                 header={header}
+                top={top}
                 loading={loading}
                 error={error}
                 sort={sort}

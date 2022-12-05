@@ -17,7 +17,9 @@ export interface TheTableProps {
 
   //optional props use ?. for fuctions before invoking them
   loading?:boolean;
-  loadingError?:string
+  loadingError?:string;
+
+  top?:number
 
   update?:boolean
   sort?:boolean
@@ -35,6 +37,7 @@ export interface TheTableProps {
     rows,
     header,
     error,
+    top=0,
     loading=false,
     loadingError="",
     update=false,
@@ -175,9 +178,12 @@ export interface TheTableProps {
   return (
     <div className="w-[100%]  h-fit ">
       <div className="h-fit">
-        <table border={1} 
+        <table border={1}
+          style={{ position: 'sticky', top }} 
           className={"table-auto w-full "}>
-          <thead className="p-7 w-full sticky top-0 h-16">
+          <thead 
+            style={{ position: 'sticky', top:top-20 }} 
+          className=" w-full h-16">
             <IconContext.Provider
               value={{
                 size: "20px",

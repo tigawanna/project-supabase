@@ -132,6 +132,7 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
                 rows={bills}
                 header={header}
                 loading={query.isLoading}
+                top={20}
                 // error={error}
                 // sort={false}
                 update={update}
