@@ -45,6 +45,9 @@ if(type==="date" && (item[prop] as Tyme)?.seconds){
 if(type==="date" && item[prop] instanceof Date){
   return dayjs(item[prop]).format("DD/MM/YYYY")
  }
+  if (type === "date") {
+    return dayjs(item[prop]).format("DD/MM/YYYY")
+  }
  
 return item[prop];
 };
@@ -79,7 +82,7 @@ const currentlyEditing = editIdx === index;
           {currentlyEditing&&head.editable ? (
             <div>
               <input
-                className="w-full p-1 border border-purple-400 rounded-md text-center bg-slate-700 text-white"
+                className="w-full   rounded-md text-center bg-slate-700 text-white"
                 id={head.prop}
                 name={head.prop}
                 onChange={(e) => handleChange(e, head.prop, index)}

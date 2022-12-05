@@ -88,3 +88,24 @@ export const get_bills_rpc = async (
         throw e;
       }
     };
+
+        export const get_one_shop = async (shop_id:string) => {
+          try {
+            let { data: shops, error } =
+              await supabase
+                .from("bills")
+                .select(`*`)
+                .filter('shop','eq', shop_id)
+               .order("month",{ascending:false})
+            if (error) {
+              throw error;
+            }
+            return shops;
+          } catch (e) {
+            console.log(
+              "error fecthing shops === ",
+              e
+            );
+            throw e;
+          }
+        };

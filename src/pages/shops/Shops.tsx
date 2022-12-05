@@ -40,7 +40,8 @@ return (
 error={query.error}
 isError={query.isError}
 isLoading={query.isLoading}
-loader={<LoaderElipse/>}>
+loader={<LoaderElipse/>}
+>
 <div className='w-full h-[80%] p-2 flex flex-wrap items-center justify-center 
 overflow-scroll gap-2'>
 {

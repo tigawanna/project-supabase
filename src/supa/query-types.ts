@@ -33,3 +33,13 @@ export interface ShopsType {
 export interface Tenants {
   tenant_name: string;
 }
+
+export interface ShopBills {
+  id: string;
+  created_at: string;
+  shop: string;
+  elec_readings: number;
+  water_readings: number;
+  month: number;
+  year: number;
+}

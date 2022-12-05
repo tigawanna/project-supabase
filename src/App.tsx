@@ -20,6 +20,7 @@ import { Shops } from './pages/shops/Shops';
 import { TenantsLayout } from './pages/tenants/TenantsLayout';
 import { Tenants } from './pages/tenants/Tenants';
 import { LoaderElipse } from './shared/loaders/Loaders';
+import { OneShop } from './pages/shops/OneShop';
 
 
 
@@ -81,6 +82,10 @@ function App() {
               element: <Shops/>,
               // loader: deferredBlogPostsLoader,
             },
+            {
+              path:':shop',
+              element:<OneShop/>
+            }
 
           ],
         },
