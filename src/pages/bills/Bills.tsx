@@ -126,7 +126,7 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
       <div className='w-full h-full flex flex-col items-center overflow-y-scroll'>
           
 
-        <div className="w-full ">
+        <div className="w-full p-4">
               <div
                   className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
                left-[45%] right-[45%] rounded-xl sticky top-0 z-40">

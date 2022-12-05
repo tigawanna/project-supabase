@@ -1,7 +1,7 @@
 import { supabase } from "./config";
 import { BillFromRPC } from "./query-types";
 
-export const get_all_shops=async()=>{
+export const gets=async()=>{
   try{
    let { data: shops, error } = await supabase
      .from("shops")
@@ -63,3 +63,25 @@ export const get_bills_rpc = async (
 
 
 
+    export const get_shops = async () => {
+      try {
+        let { data: shops, error } =
+          await supabase.from("shops").select(
+            ` *,
+              tenants(
+                  tenant_name
+                )
+             `
+          );
+        if (error) {
+          throw error;
+        }
+        return shops;
+      } catch (e) {
+        console.log(
+          "error fecthing shops === ",
+          e
+        );
+        throw e;
+      }
+    };

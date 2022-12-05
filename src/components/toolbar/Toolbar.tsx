@@ -9,6 +9,7 @@ import { TheIcon } from "./../../shared/TheIcon";
 import { Link } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
+import { Tenants } from './../../pages/tenants/Tenants';
 
 interface ToolbarProps {
   user: User | null | undefined;
@@ -57,10 +58,23 @@ export const Toolbar: React.FC<ToolbarProps> = ({
           iconAction={toggle}
         />
       </div>
-        <div className="w-[20%] h-full flex justify-end items-center">
-              <Link to="/bills">bills</Link>
+      <div className="min-w-[20%] w-fit px-2 h-full flex justify-center items-center  gap-2
+         border-2 rounded-xl  font-bold dark:font-normal ">
+        <div className="w-full  h-full flex justify-center items-center
+         hover:text-blue-700">
+        <Link to="/bills">bills</Link>
+       </div>
+      <div className="w-full h-full flex justify-center items-center 
+       hover:text-blue-700">
+        <Link to="/shops">shops</Link>
         </div>
-      <div className="w-[20%] h-full flex justify-end items-center">
+      <div className="w-full px-1 h-full flex justify-center items-center 
+      hover:text-blue-700">
+        <Link to="/tenants">tenants</Link>
+      </div>
+      </div>
+      
+      <div className="w-fit h-full flex justify-end items-center">
       <div className="  rounded-md  flex justify-center items-center
               w-16  h-full  aspect-square">
           {!user ? (

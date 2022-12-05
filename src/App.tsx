@@ -1,9 +1,5 @@
-import { useState } from 'react'
 import './App.css'
-
-
 import { RootLayout } from './pages/index/RootLayout';
-import { AboutLayout } from './pages/about/AboutLayout';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { QueryStateWrapper } from './shared/QueryStateWrapper';
 import { useQuery } from '@tanstack/react-query';
@@ -19,6 +15,11 @@ import { BillsLayout } from './pages/bills/BillsLayout';
 import { Bills } from './pages/bills/Bills';
 import { PrintPreview } from './shared/Print/PrintPreview';
 import { PrintLayout } from './shared/Print/PrintLayout';
+import { ShopsLayout } from './pages/shops/ShopsLayout';
+import { Shops } from './pages/shops/Shops';
+import { TenantsLayout } from './pages/tenants/TenantsLayout';
+import { Tenants } from './pages/tenants/Tenants';
+import { LoaderElipse } from './shared/loaders/Loaders';
 
 
 
@@ -72,6 +73,30 @@ function App() {
           ],
         },
         {
+          path: '/shops',
+          element: <ShopsLayout />,
+          children: [
+            {
+              index: true,
+              element: <Shops/>,
+              // loader: deferredBlogPostsLoader,
+            },
+
+          ],
+        },
+        {
+          path: '/tenants',
+          element: <TenantsLayout/>,
+          children: [
+            {
+              index: true,
+              element: <Tenants/>,
+              // loader: deferredBlogPostsLoader,
+            },
+
+          ],
+        },
+        {
           path: '/print-preview',
           element: <PrintLayout />,
           children: [
@@ -108,7 +133,9 @@ function App() {
     <QueryStateWrapper
       error={userQuery.error}
       isError={userQuery.isError}
-      isLoading={userQuery.isLoading}>
+      isLoading={userQuery.isLoading}
+      loader={<LoaderElipse />}
+      >
       <div className="overflow-scroll dark:bg-slate-900 h-full max-h-screen
        dark:text-white dark:shadow-white">
         <RouterProvider router={router} />

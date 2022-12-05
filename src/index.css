@@ -24,20 +24,20 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
+  box-shadow: inset 0 0 1px grey; 
   border-radius: 10px;
 }
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
   /* background: rgb(165, 127, 127);  */
-  border: #b30000 1px solid;
+  border: #e659da 1px solid;
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #b30000; 
+  background: #e659da; 
 }
 /* tailwind-scrollbar */
 .scroll-bar{

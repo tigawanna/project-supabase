@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { get_all_shops, get_bills_rpc } from './../../supa/operations';
+import { get_bills_rpc } from './../../supa/operations';
 import { QueryStateWrapper } from '../../shared/QueryStateWrapper';
 import { BillFromRPC } from './../../supa/query-types';
 import { supabase } from '../../supa/config';
