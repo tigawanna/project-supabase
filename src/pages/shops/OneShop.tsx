@@ -9,6 +9,7 @@ import { QueryStateWrapper } from './../../shared/QueryStateWrapper';
 import { LoaderElipse } from '../../shared/loaders/Loaders';
 import { TheTable } from '../../shared/table';
 import { FaPrint, FaRegEdit } from 'react-icons/fa';
+import { TableWrapper } from '../../shared/TableWrapper';
 interface OneShopProps {
 
 }
@@ -60,7 +61,7 @@ console.log("bills === ",query.data)
     ]
 const bills = query.data
 return (
-  <div className="w-full h-full">
+  <div className="w-full h-full overflow-scroll">
     <QueryStateWrapper
       error={shopquery.error}
       isError={shopquery.isError}
@@ -72,40 +73,16 @@ return (
 
 
             <div className="w-full p-4 overflow-scroll">
-                <div
-                className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
-               left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
-                    <TheIcon Icon={FaPrint}
-                        size='20'
-                        iconAction={() => {
-                            navigate("/print-preview", {
-                                state: {
-                                    rows: bills,
-                                    header,
-                                    title: `payments for ${bills && bills[0]?.month}`
-                                },
-                            })
-                        }} />
-                    <TheIcon Icon={FaRegEdit} size='20'
-                        iconAction={() => setUpdate(prev => !prev)} />
-                </div>
+            <TableWrapper
+                header={header}
+                print_msg={"hey"}
+                rows={bills as any[]}
+                loading={query.isLoading}
+      
 
-                <TheTable
-
-                    rows={bills as any}
-                    header={header}
-                    loading={query.isLoading}
-                    // error={error}
-                    // sort={false}
-                    update={update}
-                // validate={validate}
-                // saveChanges={saveChanges}
-                // deleteRow={deleteRow}
-                // clearError={clearError}
-                />
-
-                <div className="p-2 mb-2 min-w-20"></div>
+            />
             </div>
+ 
 
   </div>
 );
@@ -139,3 +116,8 @@ return (
  </div>
 );
 }
+
+
+
+
+
