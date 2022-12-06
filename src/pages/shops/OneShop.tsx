@@ -11,6 +11,7 @@ import { TheTable } from '../../shared/table';
 import { FaPrint, FaRegEdit } from 'react-icons/fa';
 import { TableWrapper } from '../../shared/TableWrapper';
 import useMeasure from 'react-use-measure';
+
 interface OneShopProps {
 
 }
@@ -32,6 +33,7 @@ export const OneShop: React.FC<OneShopProps> = ({}) => {
 const params = useParams<ParamsT>();
 const navigate = useNavigate();
 const [update, setUpdate] = React.useState(true);
+const [modalOpen, setModalOpen] = React.useState(false);
 const [ref, top] = useMeasure();
 
 const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(
@@ -64,6 +66,10 @@ console.log("bills === ",query.data)
 const bills = query.data
 return (
   <div className="w-full h-full overflow-y-scroll ">
+
+
+
+
     <QueryStateWrapper
       error={shopquery.error}
       isError={shopquery.isError}

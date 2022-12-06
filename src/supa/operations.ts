@@ -11,9 +11,7 @@ export const gets=async()=>{
           shop
        )
      `
-     )
-  
-     .range(0, 9);
+     ).range(0, 9);
   
   ;
   if(error){
