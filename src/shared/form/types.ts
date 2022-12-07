@@ -42,7 +42,7 @@ export type InputTypes =
 export interface FormOptions {
   field_name: string;
   field_type:InputTypes;
-  default_value?: string | number;
+  default_value?: string | number | boolean;
   placeholder?:string;
   required?:boolean;
   collection?:string;

@@ -123,11 +123,10 @@ class TheForm extends React.Component<Props, State> {
   // console.log("this.props.error === ",this.props.error)
   //   console.log("this.state.error === ", this.state.error)
     return (
-      <div className="w-full h-full flex flex-col items-center 
-            border border-slate-900 dark:border-slate-300 shadow-sm shadow-slate-600
-           overflow-y-scroll scroll-bar m-1 p-1">
+      <div className="w-full h-full flex flex-col items-center justify-center
+          m-1 p-1">
         <form
-          className=" min-h-fit  m-1 p-1 w-full text-base 
+          className=" min-h-[70%]  m-1 p-1 w-[90%] text-base 
           font-normal flex flex-col items-center justify-center 
           rounded-md "
           onSubmit={this.handleSubmit} >

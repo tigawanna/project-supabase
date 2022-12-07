@@ -18,8 +18,10 @@ import { supabase } from './config';
           .insert([new_bill])
           .select()
           if(error){
+            console.log("error == ",error)
             throw new Error(error.message)
           }
+          console.log("data ==== >",data)
           return data
 
     }catch(e){

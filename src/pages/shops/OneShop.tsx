@@ -47,8 +47,8 @@ const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, stri
 const query = useQuery<ShopBills[] | null, unknown, ShopBills[] | null, string[]>(
 ['shops-bills',params.shop as string], ()=>get_one_shop(params?.shop as string))
 
-console.log("params === ",top)
-console.log("bills === ",query.data)
+// console.log("params === ",top)
+// console.log("bills === ",query.data)
 
 const header = [
         { name: "ID", prop: "id", type: "id", editable: false },
@@ -135,22 +135,30 @@ the_shops?:ShopsType[] | null
 }
 
 export const OneShopInfo: React.FC<OneShopInfoProps> = ({the_shops}) => {
+const [modalOpen, setModalOpen] = React.useState(false);
 const shop = the_shops&&the_shops[0]
 return (
  <div className='w-full border p-2 flex flex-col items-center justify-start'>
         <div className='w-full flex items-center justify-center p-2 '>
-            <div className='text-xl font-bold w-full'>{shop?.shop_number}</div>
-
-
-            <div className='flex justify-center items-center '>
-                {shop?.has_elec ? <TheIcon Icon={GiElectric} color="gold" size='20' /> : null}
-                {shop?.has_water ? < TheIcon Icon={GiWaterDrop} color="blue" size='20' /> : null}
+         <div className='text-6xl font-bold w-full'>{shop?.shop_number}</div>
+            <div className='flex flex-col justify-center items-center gap-2'>
+                <TheIcon Icon={FaRegEdit} size='20'
+                    iconAction={() => setModalOpen(prev => !prev)} />
+                {shop?.has_elec ? <TheIcon Icon={GiElectric} color="gold" size='30' /> : null}
+                {shop?.has_water ? < TheIcon Icon={GiWaterDrop} color="blue" size='30' /> : null}
+               
 
             </div>
         </div>
-        <div className='w-full flex items-center justify-center truncate p-2'>
+        <ReactModalWrapper
+            isOpen={modalOpen}
+            closeModal={() => setModalOpen(prev => !prev)}
+            child={<EditShopForm shop={shop} />}
+        />
+        <div className='w-full flex items-center justify-center truncate p-2 gap-2'>
+         
             <div className='text-base font-mono w-full'>{shop?.tenants.tenant_name}</div>
-            <div className='font boldl'>{shop?.order}</div>
+            <div className='font-bold'>{shop?.order}</div>
         </div>
 
  </div>
@@ -206,7 +214,7 @@ export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
     const form_input: FormOptions[] = [
         { field_name: "elec_readings", field_type: "number", default_value:0, editing },
         { field_name: "water_readings", field_type: "number", default_value:0, editing },
-        { field_name: "month", field_type: "number", default_value:date.getMonth(), editing },
+        { field_name: "month", field_type: "number", default_value:date.getMonth()+1, editing },
         { field_name: "year", field_type: "number", default_value:date.getFullYear(), editing },
     ] 
     const [error, setError] = React.useState({ name: "", message: "" })
@@ -214,24 +222,30 @@ export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
 
     const addBillMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
       
-        const new_bill={
+    const new_bill={
           shop: shop_id,
           elec_readings: vars.payload.get('elec_readings'),
           water_readings: vars.payload.get('elec_readings'),
           month: vars.payload.get('month'),
           year: vars.payload.get('year'),
-
+    }
+      
+      try{
+        return await addBills(new_bill as any)
       }
-      return await addBills(new_bill as any),
+      catch(e){
+         throw e
+      }
+    },
       {
           onSettled: () => {
-              queryClient.invalidateQueries(['shops-bills',shop_id as string]);
+            //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
           },
           onError: (err: any) => {
-              // console.log("errror logging in ",err.data)
+              console.log("errror logging in ",err.data)
               setError({ name: "main", message: concatErrors(err) })
           }
-      }})
+      })
     
     const handleSubmit = async (data: FormData) => {
         await addBillMutation.mutate({ coll_name: 'user', payload: data })
@@ -255,5 +269,91 @@ export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
 }
 
 
+interface EditShopFormProps {
+    shop: ShopsType | null | undefined
+}
+interface FormInput {
+  has_vacant:boolean
+  has_water:boolean;
+  is_elec:boolean;
+  order:number;
+  tenant:string;
+}
 
+export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
+    const date = new Date()
+    const editing = true
+
+    interface Validate {
+        input: FormInput;
+        setError: (error: { name: string; message: string }) => void;
+    }
+
+    const validate = ({ input, setError }: Validate) => {
+        const assertNotNull = () => {
+            for (const item in input) {
+                console.log("input.item", input[item as keyof typeof input])
+            }
+        }
+          setError({ name: "", message: "" })
+        return true
+    }
+    const form_input: FormOptions[] = [
+        { field_name: "has_elec", field_type: "checkbox", default_value: shop?.has_elec, editing },
+        { field_name: "has_water", field_type: "checkbox", default_value: shop?.has_water, editing },
+        { field_name: "is_vacant", field_type: "checkbox", default_value: shop?.is_vacant, editing },
+        { field_name: "tenant", field_type: "text", default_value: shop?.tenants.tenant_name, editing },
+        { field_name: "order", field_type: "number", default_value: shop?.order, editing },
+
+    ]
+    const [error, setError] = React.useState({ name: "", message: "" })
+    const queryClient = useQueryClient();
+
+    const addBillMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
+
+        const new_bill = {
+            shop: shop?.id,
+            elec_readings: vars.payload.get('elec_readings'),
+            water_readings: vars.payload.get('elec_readings'),
+            month: vars.payload.get('month'),
+            year: vars.payload.get('year'),
+        }
+
+        try {
+            return await addBills(new_bill as any)
+        }
+        catch (e) {
+            throw e
+        }
+    },
+        {
+            onSettled: () => {
+                //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
+            },
+            onError: (err: any) => {
+                console.log("errror logging in ", err.data)
+                setError({ name: "main", message: concatErrors(err) })
+            }
+        })
+
+    const handleSubmit = async (data: FormData) => {
+        await addBillMutation.mutate({ coll_name: 'user', payload: data })
+    };
+
+    return (
+        <div className='w-full h-full border p-2 flex flex-col items-center justify-start
+         bg-slate-900'>
+            <TheForm
+                form_title='Login'
+                fields={form_input}
+                validate={validate}
+                submitFn={handleSubmit}
+                is_submitting={addBillMutation.isLoading}
+                error={error}
+                editing={editing}
+            />
+
+        </div>
+    );
+}
 
