@@ -93,7 +93,7 @@ export const get_bills_rpc = async (
               await supabase
                 .from("bills")
                 .select(`*`)
-                .filter('shop','eq', shop_id)
+                // .filter('shop','eq', shop_id)
                .order("month",{ascending:false})
             if (error) {
               throw error;

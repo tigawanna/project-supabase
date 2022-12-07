@@ -75,8 +75,8 @@ return (
     >
      <div 
      ref={ref}
-     className="w-full  m-1 p-2 bg-slate-700
-      rounded-xl sticky top-1 z-40 
+     className="w-full   p-2 bg-slate-700
+      rounded-xl sticky top-0 z-40 
      ">
       <OneShopInfo the_shops={shopquery.data} />
 
