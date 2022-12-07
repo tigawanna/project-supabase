@@ -1,14 +1,7 @@
-import React from 'react'
-import ReactDom from 'react-dom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { get_bills_rpc } from './../../supa/operations';
-import { QueryStateWrapper } from '../../shared/QueryStateWrapper';
-import { BillFromRPC } from './../../supa/query-types';
-import { supabase } from '../../supa/config';
-import { TheTable } from '../../shared/table';
-import { DivModal } from './../../shared/portal/DivModal';
-import ReactModal from 'react-modal';
+import React, { ReactNode } from 'react'
 import Modal from 'react-modal';
+import { ReactModalWrapper } from '../../shared/ReactModalWrapper';
+import { Consent } from './../../shared/Consent';
 interface TestProps {
     user: any
 }
@@ -21,11 +14,11 @@ return (
         <button onClick={() => setIsOpen(true)}>
             Click to Open Modal
         </button>
-       <TestModal
+       <ReactModalWrapper
        isOpen={isOpen}
        closeModal={()=>setIsOpen(false)}
-       styles={customStyles}
-
+       styles={{overlay_bg_color:''}}
+       child={<TestChild/>}
        />
 
 
@@ -38,47 +31,21 @@ return (
 
 
 
-interface TestModalProps {
-isOpen:boolean;
-closeModal:()=>void
-styles:any
+
+interface ModalStyles{
+    overlay: React.CSSProperties,
+    content: React.CSSProperties
 }
-
-export const TestModal: React.FC<TestModalProps> = ({isOpen,closeModal,styles}) => {
-return (
-    <Modal
-        isOpen={isOpen}
-        // onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={styles}
-        contentLabel="Example Modal"
-    >
-        {/* <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2> */}
-        <button onClick={closeModal}>close</button>
-        <div>I am a modal</div>
-        <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-        </form>
-    </Modal>
-);
-}
-
-
-
-
-
-const customStyles = {
+const customStyles:ModalStyles = {
     overlay: {
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.75)'
+        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+
+
     },
     content: {
         position: 'absolute',
@@ -86,12 +53,36 @@ const customStyles = {
         left: '30%',
         right: '30%',
         bottom: '20%',
-        border: '1px solid #ccc',
-        background: '#fff',
         overflow: 'auto',
         WebkitOverflowScrolling: 'touch',
-        borderRadius: '4px',
+        borderRadius: '7px',
         outline: 'none',
         padding: '20px'
     }
 };
+
+
+
+interface TestChildProps {
+    deps?:any
+    isOpen?: boolean
+    closeModal?: () => void
+}
+
+export const TestChild: React.FC<TestChildProps> = ({closeModal}) => {
+    
+return (
+ <div>
+        {/* <h2 ref={(_subtitle) => (subtitle = _subtitle)}>Hello</h2> */}
+        <button onClick={closeModal}>close</button>
+        <div>I am a modal</div>
+        <form className='flex flex-col items-center'>
+            <input />
+            <button>tab navigation</button>
+            <button>stays</button>
+            <button>inside</button>
+            <button>the modal</button>
+        </form>
+ </div>
+);
+}

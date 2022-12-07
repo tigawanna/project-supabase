@@ -72,6 +72,10 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       hover:text-blue-700">
         <Link to="/tenants">tenants</Link>
       </div>
+      <div className="w-full px-1 h-full flex justify-center items-center 
+      hover:text-rose-700">
+          <Link to="/test">test</Link>
+        </div>
       </div>
       
       <div className="w-fit h-full flex justify-end items-center">

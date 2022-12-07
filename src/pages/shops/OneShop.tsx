@@ -54,7 +54,7 @@ const query = useQuery<ShopBills[] | null, unknown, ShopBills[] | null, string[]
 console.log("params === ",top)
 console.log("bills === ",query.data)
 
-    const header = [
+const header = [
         { name: "ID", prop: "id", type: "id", editable: false },
         { name: "DATE", prop: "created_at", type: "date", editable: false },
         { name: "ELEC", prop: "elec_readings", type: "number", editable: true },
@@ -62,13 +62,10 @@ console.log("bills === ",query.data)
         { name: "MONTH", prop: "month", type: "number", editable: true },
         { name: "YEAR", prop: "year", type: "number", editable: true },
 
-    ]
+]
 const bills = query.data
 return (
   <div className="w-full h-full overflow-y-scroll ">
-
-
-
 
     <QueryStateWrapper
       error={shopquery.error}
@@ -78,7 +75,7 @@ return (
     >
      <div 
      ref={ref}
-     className="w-full  m-1 p-2 bg-purple-700
+     className="w-full  m-1 p-2 bg-slate-700
       rounded-xl sticky top-1 z-40 
      ">
       <OneShopInfo the_shops={shopquery.data} />
