@@ -176,7 +176,7 @@ export interface TheTableProps {
   
   
   return (
-    <div className="w-[100%]  h-fit ">
+    <div className="w-[100%]  h-fit">
       <div className="h-fit">
         <table border={1}
           style={{ position: 'sticky', top }} 
@@ -188,7 +188,7 @@ export interface TheTableProps {
               value={{
                 size: "20px",
                 className:
-                  "text-white m-0 p-0 flex-center hover:bg-purple-700 hover:rounded-sm",
+                  "text-white   flex-center hover:bg-purple-700 hover:rounded-sm",
               }}
             >
               <tr>

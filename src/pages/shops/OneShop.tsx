@@ -2,15 +2,16 @@ import React from 'react'
 import { TheIcon } from '../../shared/TheIcon';
 import { ShopBills, ShopsType } from '../../supa/query-types';
 import { GiElectric, GiWaterDrop } from 'react-icons/gi'
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {  useQuery } from '@tanstack/react-query';
 import { get_one_shop, get_shops } from '../../supa/operations';
 import { QueryStateWrapper } from './../../shared/QueryStateWrapper';
 import { LoaderElipse } from '../../shared/loaders/Loaders';
 import { TheTable } from '../../shared/table';
-import { FaPrint, FaRegEdit } from 'react-icons/fa';
-import { TableWrapper } from '../../shared/TableWrapper';
+import { FaPrint, FaRegEdit, FaPlus } from 'react-icons/fa';
 import useMeasure from 'react-use-measure';
+import { ReactModalWrapper } from '../../shared/ReactModalWrapper';
+import { useCheckMobileView } from './../../shared/hooks/random';
 
 interface OneShopProps {
 
@@ -35,6 +36,7 @@ const navigate = useNavigate();
 const [update, setUpdate] = React.useState(true);
 const [modalOpen, setModalOpen] = React.useState(false);
 const [ref, top] = useMeasure();
+
 
 const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(
     ['shops'],get_shops,
@@ -65,7 +67,7 @@ const header = [
 ]
 const bills = query.data
 return (
-  <div className="w-full h-full overflow-y-scroll ">
+  <div className="w-full h-full overflow-y-scroll scroll-bar">
 
     <QueryStateWrapper
       error={shopquery.error}
@@ -75,18 +77,20 @@ return (
     >
      <div 
      ref={ref}
-     className="w-full   p-2 bg-slate-700
-      rounded-xl sticky top-0 z-40 
+     className="w-full   px-2 bg-slate-700
+      rounded-xl sticky top-0 left-0 right-0 z-40 text-white
      ">
       <OneShopInfo the_shops={shopquery.data} />
 
       </div>
-   
-
     </QueryStateWrapper>
-
-
-        <div className="w-full p-2">
+    <ReactModalWrapper
+    isOpen={modalOpen}
+    closeModal={()=>setModalOpen(prev=>!prev)}
+    
+    child={<OneShopForm/>}
+    />
+    <div className="w-full px-5">
             <div
                 className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
                left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
@@ -103,6 +107,8 @@ return (
                     }} />
                 <TheIcon Icon={FaRegEdit} size='20'
                     iconAction={() => setUpdate(prev => !prev)} />
+                <TheIcon Icon={FaPlus} size='20'
+                    iconAction={() => setModalOpen(prev => !prev)} />
             </div>
 
             <TheTable
@@ -110,7 +116,7 @@ return (
                 rows={bills as any[]}
                 header={header}
                 loading={query.isLoading}
-                top={top.height+20}
+                top={top.height+19}
                 // error={error}
                 // sort={false}
                 update={update}
@@ -157,6 +163,35 @@ return (
 );
 }
 
+
+
+interface OneShopFormProps {
+    the_shops?: ShopsType[] | null
+}
+
+export const OneShopForm: React.FC<OneShopFormProps> = ({ the_shops }) => {
+    const shop = the_shops && the_shops[0]
+    return (
+        <div className='w-full h-full border p-2 flex flex-col items-center justify-start
+         bg-slate-900'>
+            <div className='w-full flex items-center justify-center p-2 '>
+                <div className='text-xl font-bold w-full'>{shop?.shop_number}</div>
+
+
+                <div className='flex justify-center items-center '>
+                    {shop?.has_elec ? <TheIcon Icon={GiElectric} color="gold" size='20' /> : null}
+                    {shop?.has_water ? < TheIcon Icon={GiWaterDrop} color="blue" size='20' /> : null}
+
+                </div>
+            </div>
+            <div className='w-full flex items-center justify-center truncate p-2'>
+                <div className='text-base font-mono w-full'>{shop?.tenants.tenant_name}</div>
+                <div className='font boldl'>{shop?.order}</div>
+            </div>
+
+        </div>
+    );
+}
 
 
 
