@@ -1,12 +1,11 @@
 import React from 'react'
-import { supabase } from './../../supa/config';
-import { QueriesObserver, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { get_shops } from './../../supa/operations';
-import { QueryStateWrapper } from '../../shared/QueryStateWrapper';
-import { LoaderSpinner, LoaderElipse } from './../../shared/loaders/Loaders';
+import { LoaderElipse } from './../../shared/loaders/Loaders';
 import { ShopsType } from '../../supa/query-types';
 import { DivList } from '../../shared/lists/DivList';
 import { ShopCard } from '../../components/shops/ShopCard';
+import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
 interface ShopsProps {
 
 }

@@ -1,7 +1,7 @@
 import React from 'react'
-import { TheIcon } from '../../shared/TheIcon';
 import { supabase } from '../../supa/config';
 import { FcGoogle } from 'react-icons/fc'
+import { TheIcon } from '../../shared/extra/TheIcon';
 interface OauthSignInProps {
 
 }

@@ -1,11 +1,11 @@
 import React from 'react'
-import { Record,Admin } from 'pocketbase';
 import { useQueryClient } from '@tanstack/react-query';
-import { client } from './../pb/config';
+
 import { Link } from 'react-router-dom';
+import { User } from '../../supa/user-types';
 
 interface ProfileMenuProps {
-    user: Record | Admin | null | undefined
+    user?: User |null
     avatar:string
     setOpen:React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -14,7 +14,7 @@ export const ProfileMenu: React.FC<ProfileMenuProps> = ({user,avatar,setOpen}) =
     const queryClient = useQueryClient();
 
     const logout = () => {
-        client.authStore.clear();
+        // client.authStore.clear();
         queryClient.invalidateQueries(["user"]);
         setOpen(prev=>!prev)
     };
@@ -26,7 +26,7 @@ return (
  flex flex-col justify-center items-center gap-5'>
     
     <div className='w-full h-fit flex flex-col justify-center items-center p-2 '>
-        {user?.username}
+        {user?.user_metadata.name}
     </div>    
     <div className='w-full h-fit flex flex-col justify-center items-center'>
             <img

@@ -5,11 +5,12 @@ import {
   BsSunFill,
   BsFillMoonFill,
 } from "react-icons/bs";
-import { TheIcon } from "./../../shared/TheIcon";
+
 import { Link } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
 import { Tenants } from './../../pages/tenants/Tenants';
+import { TheIcon } from "../../shared/extra/TheIcon";
 
 interface ToolbarProps {
   user: User | null | undefined;

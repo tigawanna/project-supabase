@@ -4,10 +4,10 @@ import { TheSelect } from "./TheSelect";
 import { TheFileInput } from "./TheFileInput ";
 import { TheFetchSelect } from './TheFetchSelect';
 import { FormOptions, SetInput } from "./types";
-import { Loading } from './../Loading';
 import { TheTextarea } from './TheTextArea';
 import { TheSearchSelect } from './TheSearchSelect';
 import { TheCountrySelect } from './TheCountrySelect';
+import { Loading } from "../extra/Loading";
 
 type FormError = { name: string; message: string };
 

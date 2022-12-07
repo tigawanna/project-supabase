@@ -1,6 +1,5 @@
 import React from 'react'
 import { FormOptions } from './types';
-import { TheIcon } from './../TheIcon';
 import { AiOutlineCamera } from 'react-icons/ai'
 
 interface TheFileInputProps {

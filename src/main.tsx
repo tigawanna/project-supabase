@@ -4,7 +4,8 @@ import App from './App'
 import './index.css'
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ErrorBoundary from './shared/ErrorBoundary';
+import ErrorBoundary from './shared/extra/ErrorBoundary';
+
 
 
 

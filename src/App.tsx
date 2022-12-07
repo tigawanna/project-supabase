@@ -1,7 +1,6 @@
 import './App.css'
 import { RootLayout } from './pages/index/RootLayout';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { QueryStateWrapper } from './shared/QueryStateWrapper';
 import { useQuery } from '@tanstack/react-query';
 import { TestLayout } from './components/test/TestLayout';
 import { Test } from './components/test/Test';
@@ -21,6 +20,7 @@ import { TenantsLayout } from './pages/tenants/TenantsLayout';
 import { Tenants } from './pages/tenants/Tenants';
 import { LoaderElipse } from './shared/loaders/Loaders';
 import { OneShop } from './pages/shops/OneShop';
+import { QueryStateWrapper } from './shared/extra/QueryStateWrapper';
 
 
 

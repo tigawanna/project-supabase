@@ -3,11 +3,11 @@ import React from 'react'
 import { FaPlus, FaRegCreditCard, FaTimes, FaPrint, FaRegEdit } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import useMeasure from 'react-use-measure';
+import { TheIcon } from '../../shared/extra/TheIcon';
 import { TheTable } from '../../shared/table';
-import { TheIcon } from '../../shared/TheIcon';
 import { get_bills_rpc } from '../../supa/operations';
 import { User } from '../../supa/user-types';
-import { mockdata } from './../../shared/data';
+
 
 interface BillsProps {
     user?: User | null

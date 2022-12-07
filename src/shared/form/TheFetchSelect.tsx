@@ -1,6 +1,5 @@
 import React from 'react'
-import { UseQueryResult } from '@tanstack/react-query';
-import { FormOptions, QueryFnProps, SetInput } from './types';
+import { FormOptions, SetInput } from './types';
 
 
 

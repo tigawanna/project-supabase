@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react'
-import Modal from 'react-modal';
-import { ReactModalWrapper } from '../../shared/ReactModalWrapper';
-import { Consent } from './../../shared/Consent';
+import React from 'react'
+import { ReactModalWrapper } from '../../shared/extra/ReactModalWrapper';
+
+
 interface TestProps {
     user: any
 }

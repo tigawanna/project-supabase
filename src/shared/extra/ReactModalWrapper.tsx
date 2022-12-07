@@ -1,6 +1,6 @@
 import React,{ ReactNode } from "react";
 import Modal  from 'react-modal';
-import { useCheckMobileView } from './hooks/random';
+
 
 interface ReactModalWrapperProps {
     isOpen: boolean;
@@ -25,7 +25,7 @@ interface ModalStyles {
     content: React.CSSProperties
 }
 export const ReactModalWrapper: React.FC<ReactModalWrapperProps> = ({isOpen, closeModal, styles, child, deps }) => {
-const{isMobile,width}= useCheckMobileView()  
+const{isMobile,width}= useCheckInMobile()  
 const adjustSize=(mobile:boolean,size:string,mobile_size:string)=>{
 return mobile?mobile_size:size
 }

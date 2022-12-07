@@ -1,8 +1,8 @@
 import React from 'react'
-import { TheIcon } from '../../shared/TheIcon';
 import { ShopsType } from '../../supa/query-types';
 import { GiElectric, GiWaterDrop } from 'react-icons/gi'
 import { useNavigate } from 'react-router-dom';
+import { TheIcon } from '../../shared/extra/TheIcon';
 interface ShopCardProps {
 shop?:ShopsType | null
 }

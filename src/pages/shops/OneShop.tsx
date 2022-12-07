@@ -1,17 +1,20 @@
 import React from 'react'
-import { TheIcon } from '../../shared/TheIcon';
 import { ShopBills, ShopsType } from '../../supa/query-types';
 import { GiElectric, GiWaterDrop } from 'react-icons/gi'
 import { useNavigate, useParams } from 'react-router-dom';
-import {  useQuery } from '@tanstack/react-query';
+import {  useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { get_one_shop, get_shops } from '../../supa/operations';
-import { QueryStateWrapper } from './../../shared/QueryStateWrapper';
 import { LoaderElipse } from '../../shared/loaders/Loaders';
 import { TheTable } from '../../shared/table';
 import { FaPrint, FaRegEdit, FaPlus } from 'react-icons/fa';
 import useMeasure from 'react-use-measure';
-import { ReactModalWrapper } from '../../shared/ReactModalWrapper';
-import { useCheckMobileView } from './../../shared/hooks/random';
+import { FormOptions } from '../../shared/form/types';
+import TheForm from '../../shared/form/TheForm';
+import { addBills } from './../../supa/mutations';
+import { concatErrors } from '../../shared/utils/utils';
+import { QueryStateWrapper } from './../../shared/extra/QueryStateWrapper';
+import { ReactModalWrapper } from './../../shared/extra/ReactModalWrapper';
+import { TheIcon } from './../../shared/extra/TheIcon';
 
 interface OneShopProps {
 
@@ -20,15 +23,6 @@ type ParamsT = {
     shop: string
 }
 
-
-
-// id: string
-// created_at: string
-// shop: string
-// elec_readings: number
-// water_readings: number
-// month: number
-// year: number
 
 export const OneShop: React.FC<OneShopProps> = ({}) => {
 const params = useParams<ParamsT>();
@@ -88,7 +82,7 @@ return (
     isOpen={modalOpen}
     closeModal={()=>setModalOpen(prev=>!prev)}
     
-    child={<OneShopForm/>}
+    child={<OneShopForm shop_id={params.shop}/>}
     />
     <div className="w-full px-5">
             <div
@@ -166,28 +160,95 @@ return (
 
 
 interface OneShopFormProps {
-    the_shops?: ShopsType[] | null
+    shop_id?:string
+}
+interface FormInput {
+    shop: string;
+    elec_readings: number;
+    water_readings: number;
+    month: number;
+    year: number;
 }
 
-export const OneShopForm: React.FC<OneShopFormProps> = ({ the_shops }) => {
-    const shop = the_shops && the_shops[0]
-    return (
+export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
+  const date = new Date()
+    const editing = true
+
+    interface Validate {
+        input: FormInput;
+        setError: (error: { name: string; message: string }) => void;
+    }
+
+  const validate = ({ input, setError }: Validate) => {
+        const assertNotNull=()=>{
+         for (const item in input){
+         console.log("input.item",input[item as keyof typeof input])
+         }
+        }
+        // console.log("input === ",input)
+        // const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        // if (input.shop === "") {
+        //     setError({ name: "shop", message: "email field required" })
+        //     return false
+        // }
+        // if (!input.elec_readings) {
+        //     setError({ name: "email", message: "invalid email pattern" })
+        //     return false
+        // }
+        // if (input.) {
+        //     setError({ name: "password", message: "password minimun length is 1" })
+        //     return false
+        // }
+
+        setError({ name: "", message: "" })
+        return true
+    }
+    const form_input: FormOptions[] = [
+        { field_name: "elec_readings", field_type: "number", default_value:0, editing },
+        { field_name: "water_readings", field_type: "number", default_value:0, editing },
+        { field_name: "month", field_type: "number", default_value:date.getMonth(), editing },
+        { field_name: "year", field_type: "number", default_value:date.getFullYear(), editing },
+    ] 
+    const [error, setError] = React.useState({ name: "", message: "" })
+    const queryClient = useQueryClient();
+
+    const addBillMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
+      
+        const new_bill={
+          shop: shop_id,
+          elec_readings: vars.payload.get('elec_readings'),
+          water_readings: vars.payload.get('elec_readings'),
+          month: vars.payload.get('month'),
+          year: vars.payload.get('year'),
+
+      }
+      return await addBills(new_bill as any),
+      {
+          onSettled: () => {
+              queryClient.invalidateQueries(['shops-bills',shop_id as string]);
+          },
+          onError: (err: any) => {
+              // console.log("errror logging in ",err.data)
+              setError({ name: "main", message: concatErrors(err) })
+          }
+      }})
+    
+    const handleSubmit = async (data: FormData) => {
+        await addBillMutation.mutate({ coll_name: 'user', payload: data })
+    };
+    
+      return (
         <div className='w-full h-full border p-2 flex flex-col items-center justify-start
          bg-slate-900'>
-            <div className='w-full flex items-center justify-center p-2 '>
-                <div className='text-xl font-bold w-full'>{shop?.shop_number}</div>
-
-
-                <div className='flex justify-center items-center '>
-                    {shop?.has_elec ? <TheIcon Icon={GiElectric} color="gold" size='20' /> : null}
-                    {shop?.has_water ? < TheIcon Icon={GiWaterDrop} color="blue" size='20' /> : null}
-
-                </div>
-            </div>
-            <div className='w-full flex items-center justify-center truncate p-2'>
-                <div className='text-base font-mono w-full'>{shop?.tenants.tenant_name}</div>
-                <div className='font boldl'>{shop?.order}</div>
-            </div>
+            <TheForm
+                form_title='Login'
+                fields={form_input}
+                validate={validate}
+                submitFn={handleSubmit}
+                is_submitting={addBillMutation.isLoading}
+                error={error}
+                editing={editing}
+            />
 
         </div>
     );
