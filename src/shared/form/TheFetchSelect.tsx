@@ -13,11 +13,17 @@ export const TheFetchSelect: React.FC<FetchSelectProps> = ({setInput,form_option
   // head = collection.name
   // const args = head.prop.split('.')
   const [keyword, setKeyword] = React.useState({ word:"" })
+  React.useEffect(()=>{
+    setInput({
+      item_key: form_options.fetch_select_options?.form_field as string,
+      item:form_options.fetch_select_options?.default_value_to_save as string,
+    })
+  },[])
 //  console.log("args ,keyword.word",args,keyword.word)
 
   let query
  if (form_options?.queryFn) {
-   query = form_options?.queryFn({ key:[form_options?.collection + keyword.word], keyword: keyword.word })
+   query = form_options?.queryFn(keyword.word)
   }
 
 const handleChange = (e:any) => {
@@ -26,14 +32,11 @@ const handleChange = (e:any) => {
 };
 
 const finishSearch=(item:any)=>{
-  setKeyword({
-    word: item[form_options?.filter_key as string] !== null ?
-      item[form_options?.filter_key as string][form_options?.filter_key_2 as string]
-      : item[form_options?.filter_key as string] })
+  setKeyword({word: item[form_options?.fetch_select_options?.keyword_field as string]})
   setInput({
-    item: item[form_options?.filter_key as string] !== null ?
-      item[form_options?.filter_key as string][form_options?.filter_key_2 as string]
-      : item[form_options?.filter_key as string], item_key:form_options.collection as string})
+    item_key: form_options.fetch_select_options?.form_field as string,
+    item: item[form_options?.fetch_select_options?.field_to_save as string], 
+    })
 }
 
 
@@ -55,7 +58,7 @@ return (
  <div className='w-full min-h-[150px] h-full cursor-pointer flex flex-col items-center justify-start '>
     <label className="font-bold text-white text-md  w-[90%] flex items-start">
       {form_options.required && form_options.editing ? <div className='text-red-300 mr-1'>*</div>:null}
-      {form_options.collection}
+      {form_options.fetch_select_options?.form_field}
     </label>
     <input
       className='w-[90%] p-2 m-1 text-white   border border-black 
@@ -74,19 +77,20 @@ return (
   }
     <div  className='w-[90%]  rounded-lg flex flex-wrap items-center justify-center overflow-scroll scroll-bar'>
       {data?.map((item: any, idx:number) => {
+        // console.log("item === ",item)
          return (
-          <div key={item[form_options?.filter_key as string] + idx}
+          <div key={item[form_options?.fetch_select_options?.keyword_field as string] + idx}
             onClick={() => finishSearch(item)}
-            className="m-1 py-1 px-2 text-[12px] border-2 text-center min-w-fit rounded-lg hover:bg-slate-600
+            className="m-1 py-1 px-2 text-[12px] border-2 text-center max-w-[30%] truncate rounded-lg hover:bg-slate-600
             ease-in duration-100
             ">
             {/* {item[form_options?.filter_key as string]['common']} */}
-            {
-              typeof item[form_options?.filter_key as string] === "object" &&
-              typeof item[form_options?.filter_key as string] !== null ?
-                item[form_options?.filter_key as string][form_options?.filter_key_2 as string]
-               : item[form_options?.filter_key as string]
-            }
+            <div className='w-full text-bold '>
+            { item[form_options?.fetch_select_options?.keyword_field as string]}
+             </div>
+             <div className='w-full text-[10px]'>
+               {item[form_options?.fetch_select_options?.field_to_save as string]}
+             </div>
           </div>
         )
       })}

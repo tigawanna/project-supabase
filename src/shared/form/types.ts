@@ -40,18 +40,23 @@ export type InputTypes =
 
 export interface FormOptions {
   field_name: string;
-  field_type:InputTypes;
+  field_type: InputTypes;
   default_value?: string | number | boolean;
-  placeholder?:string;
-  required?:boolean;
-  collection?:string;
-  filter_key?:string;
-  filter_list?:any[];
-  filter_key_2?:string;
-  editing?:boolean
-  queryFn?:(props: QueryFnProps) => UseQueryResult<any, unknown>
+  placeholder?: string;
+  required?: boolean;
+  hidden?:boolean;
+  filter_list?: any[];
+  editing?: boolean;
+  queryFn?: (keyword:string) => UseQueryResult<any, unknown>;
   options?: { name: string; value: string }[];
   misc?: { coll_name: string };
+  fetch_select_options?: {
+    table: string;
+     form_field:string;
+    keyword_field?: string;
+    field_to_save:string;
+    default_value_to_save:string
+  };
 }
 
 export interface FilterParams{
@@ -60,7 +65,6 @@ data:any[]; keyword:string
 
 export interface QueryFnProps{
 keyword:string
-key:string[]
 }
 
 

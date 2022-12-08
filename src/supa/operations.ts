@@ -123,7 +123,7 @@ export const get_bills_rpc = async (
                 let { data: tenants, error } =
                   await supabase
                     .from(table)
-                    .select(column)
+                    .select('*')
                     .ilike(column, `%${keyword}%`)
                     .range(0, 4);
                 if (error) {

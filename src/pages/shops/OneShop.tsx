@@ -10,7 +10,7 @@ import { FaPrint, FaRegEdit, FaPlus } from 'react-icons/fa';
 import useMeasure from 'react-use-measure';
 import { FormOptions } from '../../shared/form/types';
 import TheForm from '../../shared/form/TheForm';
-import { addBills } from './../../supa/mutations';
+import { addBills, updateShop } from './../../supa/mutations';
 import { concatErrors } from '../../shared/utils/utils';
 import { QueryStateWrapper } from './../../shared/extra/QueryStateWrapper';
 import { ReactModalWrapper } from './../../shared/extra/ReactModalWrapper';
@@ -286,16 +286,16 @@ interface QueryFnProps {
 }
 
 export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
-    const date = new Date()
-    const editing = true
-console.log(shop)
+     const editing = true
     interface Validate {
         input: FormInput;
         setError: (error: { name: string; message: string }) => void;
     }
-    const queryFn = ({ key, keyword }: QueryFnProps) => {
+    const queryFn = (keyword:string) => {
         return useQuery(['tenants', keyword], () =>
-            searchSupabase({ keyword, table: 'tenants', column: 'tenant_name' }))
+            searchSupabase({ keyword, table: 'tenants', column: 'tenant_name' }),
+            {enabled:keyword.length>1}
+            )
     }
 
     const validate = ({ input, setError }: Validate) => {
@@ -313,7 +313,16 @@ console.log(shop)
         { field_name: "has_water", field_type: "checkbox", default_value: shop?.has_water, editing },
         { field_name: "is_vacant", field_type: "checkbox", default_value: shop?.is_vacant, editing, },
         { field_name: "tenant", field_type: "fetchselect", default_value: shop?.tenants.tenant_name, 
-        editing,queryFn,filter_key:"tenant_name" },
+        editing,
+        queryFn,
+        fetch_select_options:{
+            form_field:'tenant',
+            field_to_save:'id',
+            table:'tenants',
+            keyword_field:"tenant_name",
+            default_value_to_save:shop?.tenant as string
+        }
+    },
         { field_name: "order", field_type: "number", default_value: shop?.order, editing },
 
     ]
@@ -321,20 +330,18 @@ console.log(shop)
 
     const queryClient = useQueryClient();
 
-    const addBillMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
-
-
-        const new_bill = {
-            shop: shop?.id,
-            elec_readings: vars.payload.get('elec_readings'),
-            water_readings: vars.payload.get('elec_readings'),
-            month: vars.payload.get('month'),
-            year: vars.payload.get('year'),
+    const updateShopMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
+       const new_bill = {
+  
+            has_elec: vars.payload.get('has_elec'),
+            has_water: vars.payload.get('has_water'),
+            is_vacant: vars.payload.get('is_vacant'),
+            order: vars.payload.get('order'),
+           tenant: vars.payload.get('tenant'),
         }
-
-        try {
-            return await addBills(new_bill as any)
-        }
+      try {
+            return await updateShop(new_bill as any)
+         }
         catch (e) {
             throw e
         }
@@ -350,7 +357,7 @@ console.log(shop)
         })
 
     const handleSubmit = async (data: FormData) => {
-        await addBillMutation.mutate({ coll_name: 'user', payload: data })
+        await updateShopMutation.mutate({ coll_name: 'user', payload: data })
     };
 
     return (
@@ -361,7 +368,7 @@ console.log(shop)
                 fields={form_input}
                 validate={validate}
                 submitFn={handleSubmit}
-                is_submitting={addBillMutation.isLoading}
+                is_submitting={updateShopMutation.isLoading}
                 error={error}
                 editing={editing}
                 
