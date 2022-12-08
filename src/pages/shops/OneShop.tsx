@@ -1,7 +1,7 @@
 import React from 'react'
 import { ShopBills, ShopsType } from '../../supa/query-types';
 import { useNavigate, useParams } from 'react-router-dom';
-import {  useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {  useMutation, UseMutationResult, useQuery, useQueryClient } from '@tanstack/react-query';
 import { get_one_shop, get_shops } from '../../supa/operations';
 import { LoaderElipse } from '../../shared/loaders/Loaders';
 import { TheTable } from '../../shared/table';
@@ -12,6 +12,7 @@ import { ReactModalWrapper } from './../../shared/extra/ReactModalWrapper';
 import { TheIcon } from './../../shared/extra/TheIcon';
 import { OneShopForm } from '../../components/shops/OneShopForms';
 import { OneShopInfo } from '../../components/shops/OneShopInfo';
+import { updateTable } from '../../supa/mutations';
 
 interface OneShopProps {
 
@@ -19,7 +20,19 @@ interface OneShopProps {
 type ParamsT = {
     shop: string
 }
+interface BaseInput {
+    id?: string;
+    created_at?: string;
+    elec_readings: number|string;
+    water_readings: number | string;
+    month: number | string;
+    year: number | string;
+}
 
+interface UpdateTableArgs {
+    current: BaseInput
+    prev: BaseInput
+}
 
 export const OneShop: React.FC<OneShopProps> = ({}) => {
 const params = useParams<ParamsT>();
@@ -27,7 +40,7 @@ const navigate = useNavigate();
 const [update, setUpdate] = React.useState(true);
 const [modalOpen, setModalOpen] = React.useState(false);
 const [ref, top] = useMeasure();
-
+const [error,setError]=React.useState({name:"",error:""})
 
 const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(
     ['shops'],get_shops,
@@ -44,9 +57,6 @@ const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, stri
 const query = useQuery<ShopBills[] | null, unknown, ShopBills[] | null, string[]>(
 ['shops-bills',params.shop as string], ()=>get_one_shop(params?.shop as string))
 
-// console.log("params === ",top)
-// console.log("bills === ",query.data)
-
 const header = [
 { name: "ID", prop: "id", type: "id", editable: false },
 { name: "DATE", prop: "created_at", type: "date", editable: false },
@@ -57,6 +67,42 @@ const header = [
 ]
 
 
+const updateMutation = useMutation(async({current,prev}:UpdateTableArgs)=>{
+    const new_values:BaseInput={
+    elec_readings:parseInt(current.elec_readings as string),
+    water_readings:parseInt(current.water_readings as string),
+    month:parseInt(current.month as string),
+    year: parseInt(current.year as string)
+   }
+    try {
+    return await updateTable({new_values,row_id:current.id as string,table:'bills'})
+    }
+    catch (e) {
+    throw e
+    }
+})
+
+const saveChanges = ((prev: BaseInput, current: BaseInput) => {
+    updateMutation.mutate({prev,current})
+})
+    const validate = (prev: BaseInput, current: BaseInput) => {
+        console.log("prev,curr  === ",prev,current)
+
+        if (current.id === "") {
+            setError({ name: "id", error: "valid id required" })
+            return false
+        }
+        if (current.month < 1) {
+            setError({ name: "month", error: "invalid month" })
+            return false
+        }
+        if (current.year < 2014) {
+            setError({ name: "month", error: "agrho wasn't even around then" })
+            return false
+        }
+ 
+        return true
+    }
 const bills = query.data
 return (
   <div className="w-full h-full overflow-y-scroll scroll-bar">
@@ -73,7 +119,6 @@ return (
       rounded-xl sticky top-0 left-0 right-0 z-40 text-white
      ">
       <OneShopInfo the_shops={shopquery.data} />
-
       </div>
     </QueryStateWrapper>
     <ReactModalWrapper
@@ -107,11 +152,11 @@ return (
                 header={header}
                 loading={query.isLoading}
                 top={top.height+19}
-                // error={error}
+                error={error}
                 // sort={false}
                 update={update}
-            // validate={validate}
-            // saveChanges={saveChanges}
+            validate={validate}
+            saveChanges={saveChanges}
             // deleteRow={deleteRow}
             // clearError={clearError}
             />
@@ -125,6 +170,14 @@ return (
 }
 
 
+
+// const validate = (prev: any, current: any) => {
+//     if (current.id === "") {
+//         setError({ name: "main", error: "valid id required" })
+//         return false
+//     }
+//     return true
+// }
 
 
 

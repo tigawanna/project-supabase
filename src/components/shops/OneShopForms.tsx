@@ -180,10 +180,10 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
             shop_number: shop?.shop_number
         }
         try {
-            return await updateShop(updated_shop as any, shop?.id as string)
+        return await updateShop(updated_shop as any, shop?.id as string)
         }
         catch (e) {
-            throw e
+        throw e
         }
     },
         {
@@ -199,6 +199,7 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
     const handleSubmit = async (data: FormData) => {
         await updateShopMutation.mutate({ coll_name: 'user', payload: data })
     };
+ 
 
     return (
         <div className='w-full h-full border p-2 flex flex-col items-center justify-start

@@ -1,5 +1,6 @@
 
 import { supabase } from './config';
+import { monthValues } from './../backup/backup1';
 
     interface NewBillT {
       shop: string;
@@ -15,6 +16,12 @@ import { supabase } from './config';
       order:number
       tenant:string
       shop_number:string
+    }
+    interface UpdateTable{
+      table:string;
+      row_id:string;
+      new_values:any;
+
     }
 
   export const addBills=async(new_bill:NewBillT)=>{
@@ -62,3 +69,23 @@ import { supabase } from './config';
  };
 
  
+ export const updateTable = async ({row_id,table,new_values}:UpdateTable) => {
+  try {
+     const { data, error } = await supabase
+       .from(table)
+       .update(new_values)
+       .eq("id", row_id)
+       .select()
+
+     if (error) {
+       console.log("error == ", error);
+       throw new Error(error.message);
+     }
+     console.log("data ==== >", data);
+     return data;
+   } catch (e) {
+     throw e;
+   }
+ };
+
+
