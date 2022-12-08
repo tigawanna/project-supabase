@@ -64,6 +64,9 @@ const customStyles: ModalStyles = {
             style={customStyles}
             contentLabel="Modal"
         >
+            <button
+            onClick={closeModal}
+            className='absolute top-10 right-10 hover:text-bold hover:text-red-600'>X</button>
             {/* @ts-expect-error */}
             {React.isValidElement(child) ? React.cloneElement(child, { deps, isOpen, closeModal }) : child}
 

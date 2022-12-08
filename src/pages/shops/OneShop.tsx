@@ -85,7 +85,7 @@ return (
     
     child={<OneShopForm shop_id={params.shop}/>}
     />
-    <div className="w-full px-5">
+    <div className="w-full h-full px-5 ">
             <div
                 className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
                left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
@@ -121,7 +121,7 @@ return (
             // clearError={clearError}
             />
 
-            <div className="p-2 mb-2 min-w-20"></div>
+          
         </div>
   
 
@@ -331,16 +331,16 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
     const queryClient = useQueryClient();
 
     const updateShopMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
-       const new_bill = {
-  
-            has_elec: vars.payload.get('has_elec'),
-            has_water: vars.payload.get('has_water'),
-            is_vacant: vars.payload.get('is_vacant'),
-            order: vars.payload.get('order'),
+       const updated_shop = {
+         has_elec: vars.payload.get('has_elec')==="true"?true:false,
+           has_water: vars.payload.get('has_water') === "true" ? true : false,
+           is_vacant: vars.payload.get('is_vacant') === "true" ? true : false,
+            order: parseInt(vars.payload.get('order') as string),
            tenant: vars.payload.get('tenant'),
+           shop_number:shop?.shop_number
         }
       try {
-            return await updateShop(new_bill as any)
+            return await updateShop(updated_shop as any,shop?.id as string)
          }
         catch (e) {
             throw e
@@ -363,8 +363,8 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
     return (
         <div className='w-full h-full border p-2 flex flex-col items-center justify-start
          bg-slate-900'>
-            <TheForm
-                form_title='Login'
+                <TheForm
+                form_title='Edit Shop'
                 fields={form_input}
                 validate={validate}
                 submitFn={handleSubmit}
