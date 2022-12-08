@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { get_shops } from './../../supa/operations';
 import { LoaderElipse } from './../../shared/loaders/Loaders';
 import { ShopsType } from '../../supa/query-types';
-import { DivList } from '../../shared/lists/DivList';
 import { ShopCard } from '../../components/shops/ShopCard';
 import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
 interface ShopsProps {

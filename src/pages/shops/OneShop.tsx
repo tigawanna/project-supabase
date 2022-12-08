@@ -1,7 +1,7 @@
 import React from 'react'
 import { ShopBills, ShopsType } from '../../supa/query-types';
 import { useNavigate, useParams } from 'react-router-dom';
-import {  useMutation, UseMutationResult, useQuery, useQueryClient } from '@tanstack/react-query';
+import {  useMutation, useQuery } from '@tanstack/react-query';
 import { get_one_shop, get_shops } from '../../supa/operations';
 import { LoaderElipse } from '../../shared/loaders/Loaders';
 import { TheTable } from '../../shared/table';
@@ -169,15 +169,6 @@ return (
 );
 }
 
-
-
-// const validate = (prev: any, current: any) => {
-//     if (current.id === "") {
-//         setError({ name: "main", error: "valid id required" })
-//         return false
-//     }
-//     return true
-// }
 
 
 

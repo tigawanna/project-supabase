@@ -27,6 +27,8 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
 
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const date = new Date()
+    const [period, setPeriod] = React.useState({month:date.getMonth()+1,year:date.getFullYear()})
 
     const [input, setInput] = React.useState<BillsT>({
       amount:0,
@@ -99,8 +101,17 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
     const clearError = () => {
     setError({ name: "", error: "" });
     };
-
-    const query = useQuery(['billsfromrpc', 12, 10], () => get_bills_rpc(12, 11, 2022, 2022))
+    const prevPeriod = (period: {
+        month: number;
+        year: number;
+    })=>{
+      if(period.month === 1){
+       return {month:12, year:period.year - 1}
+      }
+      return {month:period.month -1 ,year:period.year}
+     }
+    const query = useQuery(['billsfromrpc', 12, 10], () => get_bills_rpc(period.month,
+        prevPeriod(period).month,period.year,prevPeriod(period).year))
     const bills = query.data
     console.log("bills ==>>",bills)    
 
