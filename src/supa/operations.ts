@@ -107,3 +107,34 @@ export const get_bills_rpc = async (
             throw e;
           }
         };
+
+
+            interface SearchSupabase {
+              keyword: string;
+              table: string;
+              column: string;
+            }
+            export const searchSupabase = async ({
+              keyword,
+              table,
+              column,
+            }: SearchSupabase) => {
+              try {
+                let { data: tenants, error } =
+                  await supabase
+                    .from(table)
+                    .select(column)
+                    .ilike(column, `%${keyword}%`)
+                    .range(0, 4);
+                if (error) {
+                  throw new Error(error.message);
+                }
+                if (tenants) {
+                  return tenants;
+                }
+                return null;
+              } catch (e) {
+                console.log("error ===> ", e);
+                throw e;
+              }
+            };

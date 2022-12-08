@@ -2,9 +2,8 @@ import React from 'react'
 import { UseQueryResult } from '@tanstack/react-query';
 
 export type SetInput = {
-
-  item: string;
   item_key: string;
+  item: string | boolean;
 };
 
 

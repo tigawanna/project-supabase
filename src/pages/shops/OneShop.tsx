@@ -15,6 +15,7 @@ import { concatErrors } from '../../shared/utils/utils';
 import { QueryStateWrapper } from './../../shared/extra/QueryStateWrapper';
 import { ReactModalWrapper } from './../../shared/extra/ReactModalWrapper';
 import { TheIcon } from './../../shared/extra/TheIcon';
+import { searchSupabase } from './../../supa/operations';
 
 interface OneShopProps {
 
@@ -279,14 +280,22 @@ interface FormInput {
   order:number;
   tenant:string;
 }
+interface QueryFnProps {
+    keyword: string
+    key: string[]
+}
 
 export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
     const date = new Date()
     const editing = true
-
+console.log(shop)
     interface Validate {
         input: FormInput;
         setError: (error: { name: string; message: string }) => void;
+    }
+    const queryFn = ({ key, keyword }: QueryFnProps) => {
+        return useQuery(['tenants', keyword], () =>
+            searchSupabase({ keyword, table: 'tenants', column: 'tenant_name' }))
     }
 
     const validate = ({ input, setError }: Validate) => {
@@ -298,18 +307,22 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
           setError({ name: "", message: "" })
         return true
     }
+
     const form_input: FormOptions[] = [
         { field_name: "has_elec", field_type: "checkbox", default_value: shop?.has_elec, editing },
         { field_name: "has_water", field_type: "checkbox", default_value: shop?.has_water, editing },
-        { field_name: "is_vacant", field_type: "checkbox", default_value: shop?.is_vacant, editing },
-        { field_name: "tenant", field_type: "text", default_value: shop?.tenants.tenant_name, editing },
+        { field_name: "is_vacant", field_type: "checkbox", default_value: shop?.is_vacant, editing, },
+        { field_name: "tenant", field_type: "fetchselect", default_value: shop?.tenants.tenant_name, 
+        editing,queryFn,filter_key:"tenant_name" },
         { field_name: "order", field_type: "number", default_value: shop?.order, editing },
 
     ]
     const [error, setError] = React.useState({ name: "", message: "" })
+
     const queryClient = useQueryClient();
 
     const addBillMutation = useMutation(async (vars: { coll_name: string, payload: FormData }) => {
+
 
         const new_bill = {
             shop: shop?.id,
@@ -351,6 +364,7 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
                 is_submitting={addBillMutation.isLoading}
                 error={error}
                 editing={editing}
+                
             />
 
         </div>

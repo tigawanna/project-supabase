@@ -17,7 +17,7 @@ export const TheFetchSelect: React.FC<FetchSelectProps> = ({setInput,form_option
 
   let query
  if (form_options?.queryFn) {
-   query = form_options?.queryFn({ key:[form_options.collection + keyword.word], keyword: keyword.word })
+   query = form_options?.queryFn({ key:[form_options?.collection + keyword.word], keyword: keyword.word })
   }
 
 const handleChange = (e:any) => {
@@ -72,13 +72,12 @@ return (
     text-sm text-red-400 break-inside-auto 
     ">0 results found </div>:null
   }
-    <div className='w-[90%]  rounded-lg flex flex-wrap items-center justify-center '>
-      {data?.slice(0, 10).map((item: any, idx:number) => {
-        // console.log(form_options?.filter_key,form_options?.filter_key_2)
-        return (
+    <div  className='w-[90%]  rounded-lg flex flex-wrap items-center justify-center overflow-scroll scroll-bar'>
+      {data?.map((item: any, idx:number) => {
+         return (
           <div key={item[form_options?.filter_key as string] + idx}
             onClick={() => finishSearch(item)}
-            className="m-1 py-1 px-2 border-2 text-center min-w-fit rounded-lg hover:bg-slate-600
+            className="m-1 py-1 px-2 text-[12px] border-2 text-center min-w-fit rounded-lg hover:bg-slate-600
             ease-in duration-100
             ">
             {/* {item[form_options?.filter_key as string]['common']} */}
@@ -95,6 +94,7 @@ return (
  </div>
 );
 }
+
 
 
 

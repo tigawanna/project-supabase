@@ -1,13 +1,45 @@
 import React from 'react'
 import { ReactModalWrapper } from '../../shared/extra/ReactModalWrapper';
+import { supabase } from './../../supa/config';
+import { useQuery } from '@tanstack/react-query';
 
 
 interface TestProps {
     user: any
 }
 
+
 export const Test: React.FC<TestProps> = ({}) => {
  const [isOpen, setIsOpen] = React.useState(false);
+ const[keyword,setKeyword]=React.useState("")
+    interface SearchSupabase {
+        keyword: string;
+        table: string;
+        column: string;
+    }
+    const getTenant = async ({keyword,table,column}:SearchSupabase) => {
+      try {
+        let { data: tenants, error } = await supabase
+            .from(table)
+            .select(column)
+            .ilike(column, `%${keyword}%`)
+            .range(0, 9)
+        if (error) {
+            throw new Error(error.message)
+        }
+        if(tenants){
+            return tenants
+        }
+        return null
+
+    }catch (e) {
+        console.log("error ===> ", e)
+        throw e
+    }
+
+    }
+const query = useQuery(['tenant',keyword],()=>getTenant({keyword,table:'tenants',column:'tenant_name'}))
+console.log("query.data  ",query.data)
 
 return (
     <div  className=" w-[100%]  bg-purple-500">

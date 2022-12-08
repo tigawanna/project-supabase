@@ -8,6 +8,7 @@ import { TheTextarea } from './TheTextArea';
 import { TheSearchSelect } from './TheSearchSelect';
 import { TheCountrySelect } from './TheCountrySelect';
 import { Loading } from "../extra/Loading";
+import { TheCheckBox } from "./TheCheckBox";
 
 type FormError = { name: string; message: string };
 
@@ -81,6 +82,16 @@ class TheForm extends React.Component<Props, State> {
   async handleChange(event: React.ChangeEvent<any>) {
 
     const { value } = event.target;
+
+    if(event.target.type === "checkbox"){
+
+    
+      console.log("the values ==== ", !event.target.checked)
+      this.setState({
+        input: { ...this.state.input, [event.target.id]: !event.target.checked },
+      });
+      console.log(this.state.input)
+    }
     this.setState({
       input: { ...this.state.input, [event.target.id]: value },
     });
@@ -124,6 +135,7 @@ class TheForm extends React.Component<Props, State> {
   //   console.log("this.state.error === ", this.state.error)
     return (
       <div className="w-full h-full flex flex-col items-center justify-center
+      overflow-y-scroll
           m-1 p-1">
         <form
           className=" min-h-[70%]  m-1 p-1 w-[90%] text-base 
@@ -182,6 +194,18 @@ class TheForm extends React.Component<Props, State> {
                     form_options={item}
                     setInput={this.setInput}
                   
+                  />)
+              }
+              if (item.field_type === "checkbox") {
+                return (
+                  <TheCheckBox
+                    key={index + item.field_name}
+                    error={this.state.error}
+                    handleChange={this.handleChange}
+                    input={this.state.input}
+                    form_options={item}
+                    setInput={this.setInput}
+
                   />)
               }
               if (item.field_type === "textarea") {

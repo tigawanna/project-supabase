@@ -41,10 +41,10 @@ const customStyles: ModalStyles = {
         },
         content: {
             position: 'absolute',
-            top: styles?.overlay_bg_color??adjustSize(isMobile,'5%','5%'),
+            top: styles?.overlay_bg_color??adjustSize(isMobile,'1%','5%'),
             left: styles?.content_left ?? adjustSize(isMobile, '15%', '5%'),
             right: styles?.content_right ?? adjustSize(isMobile, '15%', '5%'),
-            bottom: styles?.content_bottom ?? adjustSize(isMobile, '5%', '5%'),
+            bottom: styles?.content_bottom ?? adjustSize(isMobile, '2%', '5%'),
             overflow: 'auto',
             WebkitOverflowScrolling: 'touch',
             border:styles?.content_border??'',
