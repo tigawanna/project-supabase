@@ -77,7 +77,7 @@ export const TheFileInput: React.FC<TheFileInputProps> = ({
    
         ref={fileInput}
         style={{ display: 'none' }}
-        className="w-[90%] p-2 m-1 text-white   border border-black 
+        className="w-[90%] p-2 m-1 dark:text-white    border border-black 
       dark:border-white h-10 text-base rounded-sm   dark:bg-slate-700"
         id={item.field_name}
         type={item.field_type}

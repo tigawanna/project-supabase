@@ -84,10 +84,7 @@ class TheForm extends React.Component<Props, State> {
     const { value } = event.target;
 
     if(event.target.type === "checkbox"){
-
-    
-      console.log("the values ==== ", !event.target.checked)
-      this.setState({
+   this.setState({
         input: { ...this.state.input, [event.target.id]: !event.target.checked },
       });
       console.log(this.state.input)
@@ -135,7 +132,7 @@ class TheForm extends React.Component<Props, State> {
   //   console.log("this.state.error === ", this.state.error)
     return (
       <div className="w-full h-full flex flex-col items-center justify-center
-      overflow-y-scroll
+      overflow-y-scroll bg-slate-300 dark:bg-slate-900 
           m-1 p-1">
         <form
           className=" min-h-[70%]  m-1 p-1 w-[90%] text-base 

@@ -64,6 +64,7 @@ const header = [
 { name: "WATER", prop: "water_readings", type: "number", editable: true },
 { name: "MONTH", prop: "month", type: "number", editable: true },
 { name: "YEAR", prop: "year", type: "number", editable: true },
+
 ]
 
 
@@ -111,7 +112,8 @@ return (
       error={shopquery.error}
       isError={shopquery.isError}
       isLoading={shopquery.isLoading}
-      loader={<LoaderElipse />}
+      loader={<LoaderElipse />
+    }
     >
      <div 
      ref={ref}

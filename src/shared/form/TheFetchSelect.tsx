@@ -56,12 +56,12 @@ const data = query?.data
 // console.log("data in fetch sellect === ",data)
 return (
  <div className='w-full min-h-[150px] h-full cursor-pointer flex flex-col items-center justify-start '>
-    <label className="font-bold text-white text-md  w-[90%] flex items-start">
+    <label className="font-bold  text-md  w-[90%] flex items-start">
       {form_options.required && form_options.editing ? <div className='text-red-300 mr-1'>*</div>:null}
       {form_options.fetch_select_options?.form_field}
     </label>
     <input
-      className='w-[90%] p-2 m-1 text-white   border border-black 
+      className='w-[90%] p-2 m-1 dark:text-white   border border-black 
       dark:border-white h-10 text-base rounded-sm   dark:bg-slate-700'
     id="word"
     autoComplete='off'
@@ -81,8 +81,9 @@ return (
          return (
           <div key={item[form_options?.fetch_select_options?.keyword_field as string] + idx}
             onClick={() => finishSearch(item)}
-            className="m-1 py-1 px-2 text-[12px] border-2 text-center max-w-[30%] truncate rounded-lg hover:bg-slate-600
-            ease-in duration-100
+            className="m-1 py-1 px-2 text-[12px] border-2 text-center max-w-[30%] truncate rounded-lg 
+             hover:bg-slate-400 dark:hover:bg-slate-600
+         
             ">
             {/* {item[form_options?.filter_key as string]['common']} */}
             <div className='w-full text-bold '>

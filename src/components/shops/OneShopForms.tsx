@@ -151,6 +151,7 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
         { field_name: "has_elec", field_type: "checkbox", default_value: shop?.has_elec, editing },
         { field_name: "has_water", field_type: "checkbox", default_value: shop?.has_water, editing },
         { field_name: "is_vacant", field_type: "checkbox", default_value: shop?.is_vacant, editing, },
+        
         {
             field_name: "tenant", field_type: "fetchselect", default_value: shop?.tenants.tenant_name,
             editing,
@@ -203,7 +204,7 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
 
     return (
         <div className='w-full h-full border p-2 flex flex-col items-center justify-start
-         bg-slate-900'>
+         dark:bg-slate-900 dark:text-slate-100'>
             <TheForm
                 form_title='Edit Shop'
                 fields={form_input}
