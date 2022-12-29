@@ -123,11 +123,13 @@ return (
       <OneShopInfo the_shops={shopquery.data} />
       </div>
     </QueryStateWrapper>
+
     <ReactModalWrapper
     isOpen={modalOpen}
     closeModal={()=>setModalOpen(prev=>!prev)}
     child={<OneShopForm shop_id={params.shop}/>}
     />
+    
     <div className="w-full h-full px-5 ">
             <div
                 className=" w-fit p-2  bg-slate-900 text-white flex gap-2 

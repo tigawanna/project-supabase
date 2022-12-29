@@ -27,8 +27,8 @@ const query = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]
 
 
 const shops = query.data
-console.log("shops === ",shops)
-   console.log(" query errors=== ", query.error)
+// console.log("shops === ",shops)
+//    console.log(" query errors=== ", query.error)
 return (
  <div className='h-full w-full flex flex-col items-center '>
 <div className='w-full flex items-center justify-center font-bold text-xl p-2'>

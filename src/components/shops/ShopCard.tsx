@@ -8,14 +8,17 @@ shop?:ShopsType | null
 }
 
 export const ShopCard: React.FC<ShopCardProps> = ({shop}) => {
+    // console.log("shop === ",shop)
 const navigate = useNavigate()
 return (
  <div 
- onClick={()=>navigate('/shops/'+shop?.id)}
+
  className='w-[85%] border-2 shadow-lg md:w-[30%] dark:border rounded-lg 
  flex flex-col items-center justify-start p-2
  hover:border-purple-700'>
-        <div className='w-full flex items-center justify-center '>
+        <div 
+        onClick={() => navigate('/shops/' + shop?.id)}
+        className='w-full flex items-center justify-center cursor-pointer '>
             <div className='text-xl font-bold w-full'>{shop?.shop_number}</div>
       
 

@@ -95,7 +95,7 @@ export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
         <div className='w-full h-full border p-2 flex flex-col items-center justify-start
          bg-slate-900'>
             <TheForm
-                form_title='Login'
+                form_title='add reading'
                 fields={form_input}
                 validate={validate}
                 submitFn={handleSubmit}
