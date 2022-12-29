@@ -57,35 +57,13 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
     const navigate = useNavigate();
     const date = new Date()
     const [period, setPeriod] = React.useState({month:date.getMonth()+1,year:date.getFullYear()})
-    const [input, setInput] = React.useState<BillsT>({
-        id: "",
-        curr_elec:0,
-        curr_water:0,
-        current_bill_id:"",
-        current_month:date.getMonth()+2,
-        current_year:date.getFullYear(),
-        previous_month: date.getMonth() - 1,
-        previous_year: date.getFullYear(),
-        elec_diff:0,
-        list_order:0,
-        prev_bill_id:"",
-        prev_elec:0,
-        prev_water:0,
-        shop_id:"",
-        shop_name:"",
-        shop_number:'',
-        tenant_id:"",
-        water_diff:0
-    });
-
     const [openModal, setOpenModal] = React.useState(false)
-
     const [update, setUpdate] = React.useState(true);
     const [error, setError] = React.useState({ name: "", error: "" });
     const [mainH, setMainH] = React.useState(window?.innerHeight ?? 0);
   
     const [ref, top] = useMeasure();
-
+   
     const header = [
         { name: "SHOP ID", prop: "shop_id", type: "id", editable: false },
         { name: "SHOP NAME", prop: "shop_name", type: "text", editable: false },
@@ -93,7 +71,8 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
         { name: "CURR WTR", prop: "curr_water", type: "number", editable: true },
         { name: "PREV EL", prop: "prev_elec", type: "number", editable: true },
         { name: "CURR EL", prop: "curr_elec", type: "number", editable: true },
-
+        // {name: "CURR MOn", prop: "current_month", type: "number", editable: false },
+        // { name: "PREV MOn", prop: "previous_month", type: "number", editable: false },
     ]
 
 
@@ -180,7 +159,7 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
       return {month:period.month -1 ,year:period.year}
      }
 
-    const query = useQuery(['billsfromrpc', 12, 10], () => get_bills_rpc(period.month,
+    const query = useQuery(['billsfromrpc', period], () => get_bills_rpc(period.month,
     prevPeriod(period).month,period.year,prevPeriod(period).year))
     const bills = query.data
     // console.log("bills ==>>",bills)    
@@ -238,7 +217,10 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
                 clearError={clearError}
             />
       
-            <div className="p-2 mb-2 min-w-20"></div>
+            <div className="p-2 mb-14 min-w-20"></div>
+              <div className="p-2 w-full fixed bottom-0 bg-slate-600">
+                  <BillsPeriodPicker period={period} setPeriod={setPeriod}/>
+              </div>
         </div>
  </div>
 )
@@ -279,5 +261,46 @@ return (
 ):null}
 
 </div>
+);
+}
+
+
+
+
+
+interface BillsPeriodPickerProps {
+    period: {
+        month: number;
+        year: number;
+    };
+    setPeriod: React.Dispatch<React.SetStateAction<{
+        month: number;
+        year: number;
+    }>>;
+}
+
+export const BillsPeriodPicker: React.FC<BillsPeriodPickerProps> = ({period,setPeriod}) => {
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+return (
+ <div className='w-full flex flex-wrap items-center justify-center gap-1'>
+   {months.map((month,idx)=>{
+    return (
+    <div
+     onClick={()=>setPeriod((prev)=>{
+        return {month:idx+1,year:prev.year}
+    })} 
+    key={idx}
+    style={{backgroundColor:period.month === idx+1?`purple`:""}}
+    className='py-1 px-2 rounded-lg border-2 cursor-pointer
+    border-slate-400 bg-slate-900 text-slate-200
+    hover:bg-slate-700
+
+    '>
+        {idx + 1} : {month}
+    </div>
+    )
+   })}
+ </div>
 );
 }
