@@ -268,25 +268,9 @@ return (
     {data?
     (
         <div className='  w-full flex flex-col items-center justify-center gap-2'>
-        <div className='bg-green-600 w-full text-xl font-bold flex items-center justify-center rounded-xl'>success</div>
-        
-        <div className='w-full flex flex-col items-center justify-center p-2 bg-slate-800 rounded-xl'>
-        <div className='w-full flex'>
-        <div className='font-bold'> ID:</div>
-        {data.id}
-        </div>
-   
-        <div className='w-full flex'>
-        <div className='font-bold'> elec:</div>
-        {data.elec_readings}
-        </div>
-        <div className='w-full flex'>
-        <div className='font-bold'> water:</div>
-        {data.water_readings}
-        </div>
-        </div>
-  
-    </div>)
+        <div className='bg-green-600 w-full text-xl font-bold 
+        flex items-center justify-center rounded-xl'>success</div>
+        </div>)
     :null}
 {updateBillMutation.isError?(
 <div className='bg-red-700 text-white p-1 border'>
