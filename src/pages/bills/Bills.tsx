@@ -193,8 +193,8 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
       closeModal={()=>setOpenModal(false)}
       closeAfterDelay={3000}
       styles={{
-       parent_top:"67%",
-       parent_bottom:"5%",
+       parent_top:"80%",
+       parent_bottom:"10%",
        parent_left:"5%",
        parent_right:"60%",
        content_right:'0',
@@ -266,14 +266,14 @@ return (
  <div className='w-full h-full '>
     {updateBillMutation.isLoading ? <LoaderElipse/>:null}
     {data?
-    (
-        <div className='  w-full flex flex-col items-center justify-center gap-2'>
-        <div className='bg-green-600 w-full text-xl font-bold 
+            (<div className='bg-green-600 w-full h-full text-xl font-bold  p-2
         flex items-center justify-center rounded-xl'>success</div>
-        </div>)
+        )
     :null}
 {updateBillMutation.isError?(
-<div className='bg-red-700 text-white p-1 border'>
+<div className='bg-red-700 text-white border h-full w-full p-2
+ flex items-center justify-center rounded-xl
+'>
    {updateBillMutation.error.message}
 </div>
 ):null}
