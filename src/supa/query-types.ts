@@ -32,6 +32,7 @@ export interface ShopsType {
 export type ParamsT = {
   shop: string;
 };
+export type ShopModetType = "view" | "add";
 export interface Tenants {
   tenant_name: string;
 }

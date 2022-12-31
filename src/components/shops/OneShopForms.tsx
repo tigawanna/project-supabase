@@ -28,27 +28,7 @@ export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
     }
 
     const validate = ({ input, setError }: Validate) => {
-        const assertNotNull = () => {
-            for (const item in input) {
-                console.log("input.item", input[item as keyof typeof input])
-            }
-        }
-        // console.log("input === ",input)
-        // const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-        // if (input.shop === "") {
-        //     setError({ name: "shop", message: "email field required" })
-        //     return false
-        // }
-        // if (!input.elec_readings) {
-        //     setError({ name: "email", message: "invalid email pattern" })
-        //     return false
-        // }
-        // if (input.) {
-        //     setError({ name: "password", message: "password minimun length is 1" })
-        //     return false
-        // }
-
-        setError({ name: "", message: "" })
+      setError({ name: "", message: "" })
         return true
     }
     const form_input: FormOptions[] = [
