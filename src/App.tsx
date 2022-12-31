@@ -24,6 +24,7 @@ import { QueryStateWrapper } from './shared/extra/QueryStateWrapper';
 
 
 
+
 function App() {
 
    const userQuery = useQuery(['user'],getUser)
@@ -70,6 +71,7 @@ function App() {
               element: <Bills user={user} />,
               // loader: deferredBlogPostsLoader,
             },
+  
 
           ],
         },

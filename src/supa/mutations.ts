@@ -25,7 +25,7 @@ import { monthValues } from './../backup/backup1';
     }
 
   export const addBills=async(new_bill:NewBillT)=>{
-
+ console.log("adding bills === ",new_bill)
     try{
         const { data, error } = await supabase
 
@@ -36,19 +36,19 @@ import { monthValues } from './../backup/backup1';
             console.log("error == ",error)
             throw new Error(error.message)
           }
-          console.log("data ==== >",data)
+          // console.log("data ==== >",data)
           return data
 
     }catch(e){
        throw e
     }
+}
 
 
-  }
  export const updateShop = async (
    updated_shop: ShopUpdate,shop_id:string
  ) => {
-  console.log('updated shop === ',updated_shop,shop_id)
+  console.log('updating shop === ',updated_shop,shop_id)
    try {
 
     const { data, error } = await supabase

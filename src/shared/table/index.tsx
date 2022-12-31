@@ -121,7 +121,7 @@ export interface TheTableProps {
 
      }
      for(const i in item){
-    if(item[i as keyof typeof item].seconds){
+    if(item[i as keyof typeof item]?.seconds){
      item[i]=tymeToDate(item[i] as Tyme)
      }
   
@@ -176,11 +176,11 @@ export interface TheTableProps {
   
   
   return (
-    <div className="w-[100%]  h-fit">
-      <div className="h-fit">
+    <div className="w-[100%]  h-[85%] overflow-y-scroll p-1">
+
         <table border={1}
           style={{ position: 'sticky', top }} 
-          className={"table-auto w-full "}>
+          className={"table-auto w-full  "}>
           <thead 
             style={{ position: 'sticky', top:top-20 }} 
           className=" w-full h-16">
@@ -252,7 +252,7 @@ export interface TheTableProps {
           </div>
         ) : null}
         <div className="pb-5 mb-5 min-w-20"></div>
-      </div>
+
     </div>
   );
   }

@@ -86,10 +86,7 @@ const currentlyEditing = editIdx === index;
                 id={head.prop}
                 name={head.prop}
                 onChange={(e) => handleChange(e, head.prop, index)}
-                value={
-              
-                  input[head.prop]
-                }
+                value={ input[head.prop]}
               />
               {error && error.name !=="" && error.name === head.prop ? (
                 <div className="text-red-400 text-sm ">{error.error}</div>

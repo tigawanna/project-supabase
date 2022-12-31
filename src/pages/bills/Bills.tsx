@@ -1,227 +1,175 @@
-import { useQuery, useQueryClient, useMutation, UseMutationResult } from '@tanstack/react-query';
 import React from 'react'
-import { FaPrint, FaRegEdit } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-import useMeasure from 'react-use-measure';
-import { TheIcon } from '../../shared/extra/TheIcon';
-import { TheTable } from '../../shared/table';
+import { useQuery } from '@tanstack/react-query';
 import { get_bills_rpc } from '../../supa/operations';
 import { User } from '../../supa/user-types';
-import { updateTable } from './../../supa/mutations';
-import { concatErrors } from './../../shared/utils/utils';
-import { ReactModalWrapper } from '../../shared/extra/ReactModalWrapper';
-import { LoaderElipse } from './../../shared/loaders/Loaders';
-
+import { BillsTable } from '../../components/bills/BillsTable';
+import { TheIcon } from '../../shared/extra/TheIcon';
+import { FaPlus } from 'react-icons/fa';
+import Select from 'react-select'
 
 interface BillsProps {
     user?: User | null
 }
-interface BillsT{
-    tenant_id: string
-    shop_id: string
-    current_bill_id: string
-    prev_bill_id: string
-    shop_number: string
-    shop_name: string
-    list_order: number
-    prev_elec: number
-    curr_elec: number
-    elec_diff: number
-    prev_water: number
-    curr_water: number
-    water_diff: number
-    current_month: number
-    previous_month: number
-    current_year: number
-    previous_year: number
-    id: string
-}
 
-interface RequiredBillFields{
-    shop:string;
-    elec_readings:number;
-    water_readings:number;
-    month:number;
-    year:number
+export interface PeriodType{
+    curr_month:number;
+    prev_month:number;
+    curr_year:number;
+    prev_year:number
 }
-interface UpdateMutationProps {
-    payload: BillsT;
-    prev: BillsT;
-}
+export type ModeType = "view" | "new" | "pre_add"
 
 export const Bills: React.FC<BillsProps> = ({user}) => {
+const date = new Date()
+const [mode, setMode] = React.useState<ModeType>("view")
 
-    // const onAmountChanged = React.useMemo(() => debounce(changeAmount, 500), [changeAmount]);
-
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-    const date = new Date()
-    const [period, setPeriod] = React.useState({month:date.getMonth()+1,year:date.getFullYear()})
-    const [openModal, setOpenModal] = React.useState(false)
-    const [update, setUpdate] = React.useState(true);
-    const [error, setError] = React.useState({ name: "", error: "" });
-    const [mainH, setMainH] = React.useState(window?.innerHeight ?? 0);
-  
-    const [ref, top] = useMeasure();
+const computePeriod=(date:Date,mode:ModeType)=>{
+const this_month=date.getMonth() + 1
+const this_year = date.getFullYear()
+    if(mode === "view"){
    
-    const header = [
-        { name: "SHOP ID", prop: "shop_id", type: "id", editable: false },
-        { name: "SHOP NAME", prop: "shop_name", type: "text", editable: false },
-        { name: "PREV WTR", prop: "prev_water", type: "number", editable: true },
-        { name: "CURR WTR", prop: "curr_water", type: "number", editable: true },
-        { name: "PREV EL", prop: "prev_elec", type: "number", editable: true },
-        { name: "CURR EL", prop: "curr_elec", type: "number", editable: true },
-        // {name: "CURR MOn", prop: "current_month", type: "number", editable: false },
-        // { name: "PREV MOn", prop: "previous_month", type: "number", editable: false },
-    ]
-
-
-
-    const updateBillMutation = useMutation(async ({payload,prev}:UpdateMutationProps) => {
-
-        try {
-        if (prev.prev_elec !== payload.prev_elec || prev.prev_water !== payload.prev_water){
-            const item: RequiredBillFields = {
-                shop: payload.shop_id,
-                elec_readings: payload.prev_elec,
-                water_readings: payload.prev_water,
-                month: payload.previous_month,
-                year: payload.previous_year
-            };
-        return await updateTable({ new_values: item, row_id: payload.prev_bill_id, table: "bills" })
-        } 
-        if (prev.curr_elec !== payload.curr_elec || prev.curr_water !== payload.curr_water) {
-                const item: RequiredBillFields = {
-                    shop: payload.shop_id,
-                    elec_readings: payload.curr_elec,
-                    water_readings: payload.curr_water,
-                    month: payload.current_month,
-                    year: payload.current_year
-         };
-            return await updateTable({ new_values: item, row_id: payload.current_bill_id, table: "bills" })
-        }    
-   
+    if(this_month === 1){
+        console.log("january view mode")
+        return {
+            curr_month: this_month,
+            prev_month: 12,
+            curr_year: this_year,
+            prev_year: this_year - 1
         }
-        catch (e) {
-            throw e
-        }
-    },
-        {
-            onSettled: () => {
-                //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
-                setOpenModal(false)
-            },
-            onError: (err: any) => {
-                console.log("errror logging in ", err.data)
-                setError({ name: "main", error: concatErrors(err) })
+    }
+    console.log("not january view  mode ")
+    return {
+        curr_month:this_month,
+        prev_month:this_month-1,
+        curr_year:this_year,
+        prev_year:this_year
+    }
+    }
+    
+
+    if (mode === "new") {
+
+        if (this_month === 1) {
+            console.log("january new entry mode ")
+            return {
+                curr_month: 12,
+                prev_month: 12,
+                curr_year: this_year - 1,
+                prev_year: this_year - 1
             }
+        }
+    console.log("new entry mode ")
 
-    
-        })
-
-    
-    const topHeight = (top.height / mainH) * 100;
-    const bottomHeight = 100 - (topHeight );
-
-    const validate = (prev: BillsT, current: BillsT) => {
-        // if (current.payment < 1000) {
-        //     setError({ name: "payment", error: "payment seems too low, 1k minimun" });
-        //     return false;
-        // }
-
-        setError({ name: "", error: "" });
-        return true;
-    };
-
-    const saveChanges = (prev:BillsT, current:BillsT) => {
-        console.log("saving ... current ", current);
-        console.log("saving ... previous ", prev);
-        setOpenModal(true)
-        updateBillMutation.mutate({payload:current,prev})
-  };
-
-    const deleteRow = (current: any) => {
-        // console.log("delteing current ,",current)
-        // deletePayment(current, shop.shopfloor, shop.shopnumber, queryClient);
-    };
-
-   const clearError = () => {
-    setError({ name: "", error: "" });
-    };
-
-    const prevPeriod = (period: {
-        month: number;
-        year: number;
-    })=>{
-      if(period.month === 1){
-       return {month:12, year:period.year - 1}
-      }
-      return {month:period.month -1 ,year:period.year}
+     return {
+            curr_month: this_month - 1,
+            prev_month: this_month - 1,
+            curr_year: this_year,
+            prev_year: this_year
      }
+    }
 
-    const query = useQuery(['billsfromrpc', period], () => get_bills_rpc(period.month,
-    prevPeriod(period).month,period.year,prevPeriod(period).year))
-    const bills = query.data
+    if (mode === "pre_add") {
+    console.log("pre add   mode ")
+    return {
+            curr_month: this_month,
+            prev_month: this_month,
+            curr_year: this_year,
+            prev_year: this_year
+    }
+    }
+    console.log("default   mode ")
+    return {
+        curr_month: this_month,
+        prev_month: this_month - 1,
+        curr_year: this_year,
+        prev_year: this_year
+    }
+}
+
+
+
+const [period, setPeriod] = React.useState(()=>computePeriod(date,mode))
+React.useEffect(()=>{
+setPeriod(computePeriod(date,mode))
+},[mode])
+
+
+// const prevPeriod = (period:PeriodType,table_mode:ModeType)=>{
+//       if(period.month === 1){
+//         if(table_mode === "new"){
+//         return { month: period.month, year: period.year - 1 }
+//         }
+//         return {month:12, year:period.year - 1}
+//        }
+      
+//       if(table_mode === "new"){
+//           return { month: period.month - 1 , year: period.year }
+//       }
+    
+//     if (table_mode === "pre_add") {
+//         return { month: period.month, year: period.year }
+//     }
+
+//       return {month:period.month - 1 ,year:period.year}
+// }
+// const getNextPeriod = (period: PeriodType) => {
+//            if(period.month === 12){
+//                return { month:1, year: period.year + 1 }
+//            } 
+//         return { month: period.month + 1, year: period.year }
+//     }
+// const nextPeriod = (period: PeriodType)=>{
+// //    if(period.month === 12){
+// //        return { month:1, year: period.year + 1 }
+// //    } 
+//     return { month: period.curr_month, year: period.curr_year}
+//  }
+console.log("period === ",period)
+const query = useQuery(['billsfromrpc', period,mode], () => {
+    const { curr_month,prev_month,curr_year,prev_year}=period
+    return get_bills_rpc(curr_month, prev_month, curr_year, prev_year)
+        
+})
+    const options = [
+        { value: 'view', label: 'View/Update' },
+        { value: 'add', label: 'Add new' },
+        { value: 'pre_add', label: 'Add for next month' }
+    ]
     // console.log("bills ==>>",bills)    
     // console.log("updte mutation  === ", updateBillMutation)
   return (
-      <div className='w-full h-full flex flex-col items-center overflow-y-scroll'>
-      <ReactModalWrapper
-      child={<BillsSaving updateBillMutation={updateBillMutation}/>}
-      isOpen={openModal}
-      closeModal={()=>setOpenModal(false)}
-      closeAfterDelay={3000}
-      styles={{
-       parent_top:"80%",
-       parent_bottom:"10%",
-       parent_left:"5%",
-       parent_right:"60%",
-       content_right:'0',
-       content_left:'0',
-       content_top:'0',
-       content_bottom:'0'
-      }}
-      />     
-
-        <div className="w-full p-4">
-              <div
-                  className=" w-fit p-2  bg-slate-900 text-white flex gap-2 
-               left-[45%] right-[45%] rounded-xl sticky top-0 z-40">
-                  <TheIcon Icon={FaPrint} 
-                  size='20'
-                  iconAction={() => {
-                      navigate("/print-preview", {
-                          state: {
-                              rows: bills,
-                              header,
-                              title: `payments for ${bills&&bills[0]?.current_month}`
-                          },
-                      })
-                  }} />
-                  <TheIcon Icon={FaRegEdit} size='20' 
-                  iconAction={() => setUpdate(prev => !prev)} />
-              </div>
-     
-            <TheTable
-
-                rows={bills}
-                header={header}
-                loading={query.isLoading}
-                top={20}
-                error={error}
-                // sort={false}
-                update={update}
-                validate={validate}
-                saveChanges={saveChanges}
-                // deleteRow={deleteRow}
-                clearError={clearError}
-            />
+<div className='w-full h-full flex flex-col items-center '>
+    <div className='w-full flex items-center justify-center  '>
+              <div className='flex items-center flex-center gap-1 bg-slate-800 '>
+                  <div className='border p-1'>
+                      <div className=''>current {period.curr_month} {period.curr_year} </div>
+                  </div>
       
-            <div className="p-2 mb-14 min-w-20"></div>
-              <div className="p-2 w-full fixed bottom-0 bg-slate-600">
-                  <BillsPeriodPicker period={period} setPeriod={setPeriod}/>
-              </div>
-        </div>
+                  <div className='border p-1'>
+                      <div className=''> prev {period.prev_month} {period.prev_year} </div>
+                  </div>
+             </div>
+    </div>
+
+    <div className='p-2 rounded-full fixed top-[8%] left-[5%] z-50 w-[15%]'>
+      {/* <TheIcon 
+        Icon={FaPlus} size={'30'}
+        iconAction={()=>setMode('pre_add')}
+        // iconAction={()=>setPeriod(prev=>nextPeriod(prev))}
+    /> */}
+    <Select options={options} defaultValue={options[0]}
+    // @ts-expect-error
+    onChange={(e)=>setMode(e?.value??"view")}/>
+    </div>
+
+    <BillsTable 
+    query={query} 
+    period={period} 
+    setPeriod={setPeriod}
+    mode={mode}
+    setMode={setMode}
+    />
+
  </div>
 )
 }
@@ -229,78 +177,9 @@ export const Bills: React.FC<BillsProps> = ({user}) => {
 
 
 
-interface BillsSavingProps {
-updateBillMutation: UseMutationResult<any[] | undefined, any, UpdateMutationProps, unknown>
-}
-export interface ResponseData {
-    id: string
-    created_at: string
-    shop: string
-    elec_readings: number
-    water_readings: number
-    month: number
-    year: number
-}
-export const BillsSaving: React.FC<BillsSavingProps> = ({updateBillMutation}) => {
-// console.log("updte mutation  === ",updateBillMutation)
-const data = updateBillMutation.data && updateBillMutation.data[0] as ResponseData
-return (
- <div className='w-full h-full '>
-    {updateBillMutation.isLoading ? <LoaderElipse/>:null}
-    {data?
-            (<div className='bg-green-600 w-full h-full text-xl font-bold  p-2
-        flex items-center justify-center rounded-xl'>success</div>
-        )
-    :null}
-{updateBillMutation.isError?(
-<div className='bg-red-700 text-white border h-full w-full p-2
- flex items-center justify-center rounded-xl
-'>
-   {updateBillMutation.error.message}
-</div>
-):null}
-
-</div>
-);
-}
 
 
 
 
 
-interface BillsPeriodPickerProps {
-    period: {
-        month: number;
-        year: number;
-    };
-    setPeriod: React.Dispatch<React.SetStateAction<{
-        month: number;
-        year: number;
-    }>>;
-}
 
-export const BillsPeriodPicker: React.FC<BillsPeriodPickerProps> = ({period,setPeriod}) => {
-const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-return (
- <div className='w-full flex flex-wrap items-center justify-center gap-1'>
-   {months.map((month,idx)=>{
-    return (
-    <div
-     onClick={()=>setPeriod((prev)=>{
-        return {month:idx+1,year:prev.year}
-    })} 
-    key={idx}
-    style={{backgroundColor:period.month === idx+1?`purple`:""}}
-    className='py-1 px-2 rounded-lg border-2 cursor-pointer
-    border-slate-400 bg-slate-900 text-slate-200
-    hover:bg-slate-700
-
-    '>
-        {idx + 1} : {month}
-    </div>
-    )
-   })}
- </div>
-);
-}
