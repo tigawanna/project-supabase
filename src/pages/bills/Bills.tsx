@@ -21,8 +21,6 @@ export type ModeType = "view" | "new" | "pre_add";
 export const Bills: React.FC<BillsProps> = ({user,}) => {
   const date = new Date();
   const [mode, setMode] = React.useState<ModeType>("view");
-
-
   const [period, setPeriod] = React.useState(() =>
     computePeriod(date, mode)
   );
@@ -46,10 +44,7 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
   const options = [
     { value: "view", label: "View/Update" },
     { value: "add", label: "Add new" },
-    {
-      value: "pre_add",
-      label: "Add for next month",
-    },
+    {value: "pre_add",label: "Add for next month",},
   ];
   console.log("bills ==>>",query.data)
   // console.log("updte mutation  === ", updateBillMutation)
@@ -75,12 +70,8 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
       </div>
 
       <div className="p-2 rounded-full fixed top-[8%] left-[5%] z-50 w-[15%]">
-        {/* <TheIcon 
-        Icon={FaPlus} size={'30'}
-        iconAction={()=>setMode('pre_add')}
-        // iconAction={()=>setPeriod(prev=>nextPeriod(prev))}
-    /> */}
-        <Select
+      
+      <Select
           options={options}
           defaultValue={options[0]}
           // @ts-expect-error
