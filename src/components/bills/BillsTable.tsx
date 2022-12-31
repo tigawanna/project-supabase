@@ -13,6 +13,7 @@ import { BillFromRPC } from './../../supa/query-types';
 import { addBills } from './../../supa/mutations';
 import { ModeType } from '../../pages/bills/Bills';
 import { PeriodType } from './../../pages/bills/Bills';
+import { saveBills } from './utils';
 
 
 
@@ -24,7 +25,7 @@ interface BillsTableProps {
     setMode: React.Dispatch<React.SetStateAction<ModeType>>
 }
 
-interface BillsT {
+export interface BillsT {
     tenant_id: string
     shop_id: string
     current_bill_id: string
@@ -45,14 +46,14 @@ interface BillsT {
     id: string
 }
 
-interface RequiredBillFields {
+export interface RequiredBillFields {
     shop: string;
     elec_readings: number;
     water_readings: number;
     month: number;
     year: number
 }
-interface UpdateMutationProps {
+export interface UpdateMutationProps {
     after_edit: BillsT;
     before_edit: BillsT;
 }
@@ -79,78 +80,11 @@ export const BillsTable: React.FC<BillsTableProps> = ({query,period,setPeriod,mo
     ]
     const updateBillMutation = useMutation(async ({ after_edit, before_edit }: UpdateMutationProps) => {
    try {
-       const date = new Date()
-       const this_year = date.getFullYear()
-       const this_month = date.getMonth() + 1
-     if(mode === "new"){
-        console.log("adding new bill",after_edit)
-        // payload is the alterd fields ,prev is the values before editing started ,we;re checking if the fields have changed
-         if (before_edit.curr_elec !== after_edit.curr_elec || before_edit.curr_water !== after_edit.curr_water) {
-            const item: RequiredBillFields = {
-            shop: after_edit.shop_id,
-            elec_readings: after_edit.curr_elec,
-            water_readings: after_edit.curr_water,
-            month: this_month,
-            year: this_year
-        };
-        return await addBills(item)
-        }
-        }
-       if (mode === "pre_add") {
-
-           // payload is the alterd fields ,prev is the values before editing started ,we;re checking if the fields have changed
-           if (before_edit.curr_elec !== after_edit.curr_elec || before_edit.curr_water !== after_edit.curr_water) {
-               if (this_month ===12){
-                console.log(`pre saving to janaury while still in december ${this_year }`)
-                const item: RequiredBillFields = {
-                    shop: after_edit.shop_id,
-                    elec_readings: after_edit.curr_elec,
-                    water_readings: after_edit.curr_water,
-                    month: 1,
-                    year: this_year + 1
-                };
-                return await addBills(item)
-            }   
-            
-            console.log(`presaving to ${this_month + 1} ${this_year} `)
-            const item: RequiredBillFields = {
-                   shop: after_edit.shop_id,
-                   elec_readings: after_edit.curr_elec,
-                   water_readings: after_edit.curr_water,
-                   month: this_month + 1,
-                   year: this_year
-               };
-               return await addBills(item)
-           }
-       }
-       if(mode ==="view"){
-     if (before_edit.prev_elec !== after_edit.prev_elec || before_edit.prev_water !== after_edit.prev_water) {
-                    const item: RequiredBillFields = {
-                        shop: after_edit.shop_id,
-                        elec_readings: after_edit.prev_elec,
-                        water_readings: after_edit.prev_water,
-                        month: after_edit.previous_month,
-                        year: after_edit.previous_year
-                    };
-                    return await updateTable({ new_values: item, row_id: after_edit.prev_bill_id, table: "bills" })
-}
- if (before_edit.curr_elec !== after_edit.curr_elec || before_edit.curr_water !== after_edit.curr_water) {
-                    const item: RequiredBillFields = {
-                        shop: after_edit.shop_id,
-                        elec_readings: after_edit.curr_elec,
-                        water_readings: after_edit.curr_water,
-                        month: after_edit.current_month,
-                        year: after_edit.current_year
-                    };
-                    return await updateTable({ new_values: item, row_id: after_edit.current_bill_id, table: "bills" })
-                }
-        }
-     
-
-        }
-        catch (e) {
-            throw e
-        }
+       return await saveBills({ after_edit, before_edit },mode)
+     }
+   catch (e) {
+        throw e
+    }
     },
         {
             onSettled: () => {
