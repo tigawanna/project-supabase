@@ -106,7 +106,7 @@ const saveChanges = ((prev: BaseInput, current: BaseInput) => {
     }
 const bills = query.data
 return (
-  <div className="w-full h-full overflow-y-scroll scroll-bar">
+  <div className="w-full h-full  overflow-hidden">
 
     <QueryStateWrapper
       error={shopquery.error}
@@ -150,20 +150,21 @@ return (
                 <TheIcon Icon={FaPlus} size='20'
                     iconAction={() => setModalOpen(prev => !prev)} />
             </div>
-
+            <div className="w-full h-[60%] px-5 ">
             <TheTable
                 rows={bills as any[]}
                 header={header}
                 loading={query.isLoading}
-                top={top.height+19}
+                top={top.height - 130}
                 error={error}
                 // sort={false}
                 update={update}
-            validate={validate}
-            saveChanges={saveChanges}
+                validate={validate}
+                saveChanges={saveChanges}
             // deleteRow={deleteRow}
             // clearError={clearError}
             />
+            </div>
 
           
     </div>

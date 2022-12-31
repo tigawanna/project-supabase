@@ -143,7 +143,7 @@ function App() {
       isLoading={userQuery.isLoading}
       loader={<LoaderElipse />}
       >
-      <div className="overflow-scroll dark:bg-slate-900 h-full max-h-screen
+      <div className=" dark:bg-slate-900 h-full 
        dark:text-white dark:shadow-white">
         <RouterProvider router={router} />
       </div>

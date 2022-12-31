@@ -65,7 +65,7 @@ if(type === "id"){
 const currentlyEditing = editIdx === index;
   return (
     <tr 
-     key={index} className="">
+     key={index} className="bg-yellow-500 ">
     {/* table cell */}
     {header.map((head, index) => {
       addItemId(item,head.prop,head.type)
@@ -73,7 +73,7 @@ const currentlyEditing = editIdx === index;
       return (
         <td
           style={{ maxWidth:head.type === "id"?"1.5rem":"" }}
-        className="border-slate-800 border text-center p-[1px] truncate"
+          className="border-slate-800 border text-center p-[1px] truncate"
           key={
             
             head.prop + item[head.prop]

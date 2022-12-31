@@ -5,7 +5,6 @@ import { useCountdownTimer } from 'use-countdown-timer';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
 import { IconContext } from 'react-icons/lib';
 import { mainRow } from './components/tableparts/tableRows';
-import { UndoModal } from './components/tableparts/UndoModal';
 import { tymeToDate } from './components/TheTable/utils/utils';
 import { Tyme } from './components/TheTable/utils/types';
 import { Loader } from './components/tableparts/Loader';
@@ -178,7 +177,7 @@ export interface TheTableProps {
   return (
     <div className="w-[100%]  h-full overflow-y-scroll p-1">
     <table border={1}
-        style={{ height: "100%", top }} 
+        style={{ height: "100%", position: 'sticky', }} 
           className={"table-auto w-full  "}>
           <thead 
             style={{ position: 'sticky', top:top-20 }} 
@@ -242,14 +241,7 @@ export interface TheTableProps {
         </table>
         {loading?<Loader/>:null}
         {/* undo butto to restore removed row after edit */}
-        {countdown !== 5000 ? (
-          <div
-            className="fixed bottom-[10%] right-[10%] rounded-lg w-24 p-2  font-medium 
-          hover:bg-purple-800 bg-slate-900"
-          >
-            <UndoModal undoRemove={undoRemove} countdown={countdown} />
-          </div>
-        ) : null}
+
         <div className="pb-5 mb-5 min-w-20"></div>
 
     </div>
