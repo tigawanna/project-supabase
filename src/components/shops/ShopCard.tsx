@@ -14,9 +14,7 @@ const navigate = useNavigate()
 return (
  <div 
  onClick={() => {if (mode ==="view") navigate('/shops/' + shop?.id)}}
- className='w-[85%] border-2 shadow-lg md:w-[30%] dark:border rounded-lg 
- flex flex-col items-center justify-start p-2
- hover:border-purple-700'>
+ className=' flex flex-col items-center justify-start p-2'>
 <div 
 className='w-full flex items-center justify-center rounded-xl cursor-pointer'>
     <div className='text-xl font-bold w-full'>{shop?.shop_number}</div>
