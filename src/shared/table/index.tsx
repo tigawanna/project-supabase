@@ -176,10 +176,9 @@ export interface TheTableProps {
   
   
   return (
-    <div className="w-[100%]  h-[85%] overflow-y-scroll p-1">
-
-        <table border={1}
-          style={{ position: 'sticky', top }} 
+    <div className="w-[100%]  h-full overflow-y-scroll p-1">
+    <table border={1}
+        style={{ height: "100%", top }} 
           className={"table-auto w-full  "}>
           <thead 
             style={{ position: 'sticky', top:top-20 }} 

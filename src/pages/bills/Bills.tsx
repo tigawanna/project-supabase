@@ -42,6 +42,7 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
       );
     }
   );
+  
   const options = [
     { value: "view", label: "View/Update" },
     { value: "add", label: "Add new" },
@@ -50,7 +51,7 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
       label: "Add for next month",
     },
   ];
-  // console.log("bills ==>>",bills)
+  console.log("bills ==>>",query.data)
   // console.log("updte mutation  === ", updateBillMutation)
   return (
     <div className="w-full h-full flex flex-col items-center ">

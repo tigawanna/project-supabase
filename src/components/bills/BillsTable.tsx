@@ -124,7 +124,7 @@ export const BillsTable: React.FC<BillsTableProps> = ({query,period,setPeriod,mo
 
 return (
  <div className='w-full h-full'>
-        <div className='w-full h-full flex flex-col  overflow-y-scroll'>
+        <div className='w-full h-full flex flex-col '>
             <ReactModalWrapper
                 child={<BillsSaving updateBillMutation={updateBillMutation} />}
                 isOpen={openModal}
@@ -158,6 +158,7 @@ return (
                     }} />
             <TheIcon Icon={FaRegEdit} size='20' iconAction={() => setUpdate(prev => !prev)} />
             </div>
+                <div className='w-full h-[40%] '>
 
                 <TheTable
 
@@ -173,6 +174,7 @@ return (
                     // deleteRow={deleteRow}
                     clearError={clearError}
                 />
+                </div>
 
                 <div className="p-2  min-w-20"></div>
                 <div className="p-2 w-full fixed bottom-0 bg-slate-600">
