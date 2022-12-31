@@ -65,7 +65,7 @@ if(type === "id"){
 const currentlyEditing = editIdx === index;
   return (
     <tr 
-     key={index} className="bg-yellow-500 ">
+     key={index} className="">
     {/* table cell */}
     {header.map((head, index) => {
       addItemId(item,head.prop,head.type)
