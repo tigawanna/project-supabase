@@ -5,6 +5,7 @@ import { LoaderElipse } from './../../shared/loaders/Loaders';
 import { ShopsType } from '../../supa/query-types';
 import { ShopCard } from '../../components/shops/ShopCard';
 import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
+import { useShop } from './../../shared/hooks/shops';
 interface ShopsProps {
 
 }
@@ -22,8 +23,8 @@ export interface opsType {
 }
 
 export const Shops: React.FC<ShopsProps> = ({}) => {
-const query = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(['shops'],get_shops)
-
+// const query = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(['shops'],get_shops)
+const query = useShop()
 
 
 const shops = query.data

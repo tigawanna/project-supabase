@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShopBills, ShopsType } from '../../supa/query-types';
+import { ParamsT, ShopBills, ShopsType } from '../../supa/query-types';
 import { useNavigate, useParams } from 'react-router-dom';
 import {  useMutation, useQuery } from '@tanstack/react-query';
 import { get_one_shop, get_shops } from '../../supa/operations';
@@ -13,13 +13,12 @@ import { TheIcon } from './../../shared/extra/TheIcon';
 import { OneShopForm } from '../../components/shops/OneShopForms';
 import { OneShopInfo } from '../../components/shops/OneShopInfo';
 import { updateTable } from '../../supa/mutations';
+import { useShop } from './../../shared/hooks/shops';
 
 interface OneShopProps {
 
 }
-type ParamsT = {
-    shop: string
-}
+
 interface BaseInput {
     id?: string;
     created_at?: string;
@@ -42,18 +41,20 @@ const [modalOpen, setModalOpen] = React.useState(false);
 const [ref, top] = useMeasure();
 const [error,setError]=React.useState({name:"",error:""})
 
-const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(
-    ['shops'],get_shops,
-{
-    select:(data)=>{
-     if(data){
-         return data?.filter((item) => item.id === params?.shop)
-        }
-      return data
-    }
-}
+// const shopquery = useQuery<ShopsType[] | null, unknown, ShopsType[] | null, string[]>(
+// ['shops'],get_shops,
+// {
+//     select:(data)=>{
+//      if(data){
+//          return data?.filter((item) => item.id === params?.shop)
+//         }
+//       return data
+//     }
+// }
 
-)
+// )
+const shopquery = useShop(params as ParamsT)
+
 const query = useQuery<ShopBills[] | null, unknown, ShopBills[] | null, string[]>(
 ['shops-bills',params.shop as string], ()=>get_one_shop(params?.shop as string))
 

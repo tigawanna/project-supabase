@@ -29,7 +29,9 @@ export interface ShopsType {
   is_vacant: boolean;
   tenants: Tenants;
 }
-
+export type ParamsT = {
+  shop: string;
+};
 export interface Tenants {
   tenant_name: string;
 }
