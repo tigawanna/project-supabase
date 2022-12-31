@@ -5,6 +5,7 @@ import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
 import { useShop } from './../../shared/hooks/shops';
 import { ShopModetType, ShopsType } from '../../supa/query-types';
 import { ReactModalWrapper } from '../../shared/extra/ReactModalWrapper';
+import { ShopsCarousel } from '../../components/shops/ShopsCarousel';
 
 interface ShopsProps {
 
@@ -30,7 +31,7 @@ return (
 <ReactModalWrapper
    isOpen={open}
    closeModal={() => setOpen(prev => !prev)}
-   child={<ShopsCrrousel index={idx} shops={shops} setIdx={setIdx}/>}
+   child={<ShopsCarousel index={idx} shops={shops} setIdx={setIdx}/>}
 
 />
 <QueryStateWrapper
@@ -66,44 +67,3 @@ return(
 
 
 
-interface ShopsCrrouselProps {
-   shops: ShopsType[] | null | undefined
-   index:number
-   setIdx: React.Dispatch<React.SetStateAction<number>>
-}
-
-export const ShopsCrrousel: React.FC<ShopsCrrouselProps> = ({shops,index,setIdx}) => {
-
-return (
- <div className='w-full h-full bg-purple-300 
-       flex items-center justify-center'>
-      <button 
-      className='p-1 bg-slate-900 '
-      onClick={() => setIdx(prev => {
-         if(prev && prev >= 0 ){
-            return prev - 1
-         }
-          return prev
-         })}>
-         prev
-      </button>
-   <div className='w-full bg-purple-700 rounded-xl text-xlfirst-letter:
-      flex items-center justify-center
-      '>
-         ID
-      {shops&&shops[index].id}
-   </div>
-      <button
-         className='p-1 bg-slate-900'
-         disabled={!(shops && (index < shops?.length - 1))}
-         onClick={() => setIdx(prev => {
-            if (shops && (prev < shops?.length - 1 )) {
-              return prev + 1
-            }
-            return prev
-         })}>
-      next
-   </button>
- </div>
-);
-}

@@ -138,3 +138,25 @@ export const get_bills_rpc = async (
                 throw e;
               }
             };
+
+    export const getMostPreviousBill=async(shop:string)=>{
+    try{
+    const { data: bills, error } = await supabase
+      .from("bills")
+      .select("*")
+      .eq("shop", shop)
+      .order("created_at", { ascending: false })
+      .limit(2)
+      ;
+      ;
+      
+        if (error) {
+         throw error;
+          }
+      return bills;
+       }catch(e){
+        console.log(
+        "error fetching most recent bill === ",e);
+          throw e;
+       }
+        }
