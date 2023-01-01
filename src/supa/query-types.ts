@@ -46,3 +46,11 @@ export interface ShopBills {
   month: number;
   year: number;
 }
+
+export interface RequiredBillFields {
+  shop: string;
+  elec_readings: number;
+  water_readings: number;
+  month: number;
+  year: number;
+}

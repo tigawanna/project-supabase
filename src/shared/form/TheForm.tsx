@@ -243,9 +243,9 @@ class TheForm extends React.Component<Props, State> {
             hover:shadow-slate-900 dark:hover:shadow-slate-50 
             hover:shadow-lg dark:hover:shadow
             hover:scale-105">
-              {this.props.is_submitting?
+            {this.props.is_submitting?
               <div className="h-full w-[60%] flex justify-center items-center">
-                <Loading size={40}/></div>:
+                <Loading /></div>:
               <div className="text-lg font-bold dark:font-normal ">{this.props.button_title??"submit"}
               </div>
             }

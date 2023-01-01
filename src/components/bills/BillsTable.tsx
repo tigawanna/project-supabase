@@ -10,7 +10,6 @@ import { TheIcon } from '../../shared/extra/TheIcon';
 import { TheTable } from '../../shared/table';
 import { LoaderElipse } from './../../shared/loaders/Loaders';
 import { BillFromRPC } from './../../supa/query-types';
-import { addBills } from './../../supa/mutations';
 import { ModeType } from '../../pages/bills/Bills';
 import { PeriodType } from './../../pages/bills/Bills';
 import { saveBills } from './utils';
@@ -46,13 +45,7 @@ export interface BillsT {
     id: string
 }
 
-export interface RequiredBillFields {
-    shop: string;
-    elec_readings: number;
-    water_readings: number;
-    month: number;
-    year: number
-}
+
 export interface UpdateMutationProps {
     after_edit: BillsT;
     before_edit: BillsT;

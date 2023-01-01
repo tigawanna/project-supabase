@@ -5,8 +5,8 @@ import { GrNext,GrPrevious } from 'react-icons/gr'
 import { TheIcon } from '../../shared/extra/TheIcon';
 //@ts-ignore
 import useKeypress from 'react-use-keypress';
-import { useQuery } from '@tanstack/react-query';
-import { getMostPreviousBill } from '../../supa/operations';
+import { ShopsCarouselForm } from './ShopCarouseForm';
+
 interface ShopsCarouselProps {
     shops: ShopsType[] | null | undefined
     index: number
@@ -41,6 +41,7 @@ export const ShopsCarousel: React.FC<ShopsCarouselProps> = ({ shops, index, setI
         // Do something when the user has pressed the Escape key
     });
 
+
     const shop = shops&&shops[index]
     return (
         <div 
@@ -71,22 +72,4 @@ export const ShopsCarousel: React.FC<ShopsCarouselProps> = ({ shops, index, setI
 
 
 
-interface ShopsCarouselFormProps {
-    shop: ShopsType | null | undefined
-}
 
-export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({shop}) => {
-const query = useQuery(['latest-bill', shop], () => getMostPreviousBill(shop?.id as string))
-    console.log(query)
-return (
- <div className='w-full h-full bg-pink-900 
-    flex flex-col items-center justify-center'>
-    <div className='w-full flex flex-col justify-center p-5'>
-    <div className='text-3xl font-bold w-full'>{shop?.shop_number}</div>
-     <div className='text-xl font-bold w-full'>{shop?.tenants.tenant_name}</div>
-    <div className='font bold text-xl'>{shop?.order}</div>
-    </div>
-
- </div>
-);
-}
