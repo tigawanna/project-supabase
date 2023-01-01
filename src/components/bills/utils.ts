@@ -1,8 +1,8 @@
 
 import { ModeType } from '../../pages/bills/Bills';
-import { RequiredBillFields, UpdateMutationProps } from './BillsTable';
-import { PeriodType } from './../../pages/bills/Bills';
+import {  UpdateMutationProps } from './BillsTable';
 import { addBills, updateTable } from '../../supa/mutations';
+import { RequiredBillFields } from '../../supa/query-types';
 
 export const saveBills = async (
   values: UpdateMutationProps,

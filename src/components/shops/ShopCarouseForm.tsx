@@ -8,6 +8,8 @@ import { RequiredBillFields, ShopsType } from './../../supa/query-types';
 import { UseFormReturn } from 'react-hook-form/dist/types';
 import { Loading } from './../../shared/extra/Loading';
 import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
+import { computePeriod } from '../bills/utils';
+import { ModeType } from '../../pages/bills/Bills';
 
 
 interface ShopsCarouselFormProps {
@@ -30,13 +32,20 @@ interface BillsResponse {
 export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) => {
     const query = useQuery < BillsResponse[], unknown, BillsResponse[], (string | ShopsType | null | undefined)[]>(
     ['latest-bill', shop], () => getMostPreviousBill(shop?.id as string))
- 
+    const date = new Date();
+    const [mode, setMode] = React.useState<ModeType>("new");
+
     const form_stuff = useForm<RequiredBillFields>();
+
+    const [period, setPeriod] = React.useState(() => computePeriod(date, mode));
+    React.useEffect(() => { setPeriod(computePeriod(date, mode))}, [mode]);
+
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
         console.log(data)
     };
     
     const data = query?.data
+
     const [vals, setVals] = React.useState(data && data[0])
       React.useEffect(() => {
         if(data){
@@ -45,7 +54,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
         }
       },[shop,data])
       
-//    console.log("data === ",data)
+    console.log("data === ", data && data[0].month , period.curr_month)
     return (
  <div className='w-full h-full flex flex-col items-center  overflow-y-scroll'>
 
@@ -55,6 +64,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
         <div className='text-[10px] md:text-xl md:font-bold truncate w-[60%] '>{shop?.tenants.tenant_name}</div>
         <div className='font bold text-xl w-[20%] '>{shop?.order}</div>
    </div>
+
     <div className='w-full flex flex-col justify-center p-2'>
      {
         data&&data.map((bill,idx)=>{
@@ -74,6 +84,9 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
      }
     </div>
 </div>
+<div className='w-full flex md:flex-row flex-col items-center '>
+{data&&data[0].month === period.curr_month?"This month's bills seem o have already been enterd":null}
+</div>
    <QueryStateWrapper
    data={query.data}
    isLoading={query.isLoading}
@@ -87,8 +100,8 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
     styles={{width:'80%'}} 
     label='shop' form_stuff={form_stuff} defaultValue={vals?.shop} readOnly />
     <div className='w-full flex  flex-wrap items-center justify-center'>
-    <FormInput label='year' form_stuff={form_stuff} defaultValue={vals?.year} valueAsNumber/>
-    <FormInput label='month' form_stuff={form_stuff} defaultValue={vals?.month} valueAsNumber/>
+    <FormInput label='year' form_stuff={form_stuff} defaultValue={period.curr_year} valueAsNumber/>
+    <FormInput label='month' form_stuff={form_stuff} defaultValue={period.curr_month} valueAsNumber/>
     <FormInput label='elec_readings' form_stuff={form_stuff} 
     defaultValue={vals?.elec_readings} valueAsNumber/>
   
