@@ -43,7 +43,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
     React.useEffect(() => { setPeriod(computeShopCarouselPeriod(date, mode))}, [mode]);
 
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
-        console.log(data)
+        console.log("handle submit data === ",data)
     };
     
     const data = query?.data
@@ -57,7 +57,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
         }
       },[shop,data])
       
-    console.log("data === ", data && data[0].month , period.curr_month)
+    // console.log("data === ", data && data[0])
     return (
  <div className='w-full h-full flex flex-col items-center  overflow-y-scroll'>
 
@@ -101,17 +101,22 @@ null}
      className='w-full h-full flex  flex-col items-center justify-center gap-2'
     onSubmit={form_stuff.handleSubmit(onSubmit)}>
     <FormInput
-    styles={{width:'80%'}} 
+    styles={{width:'80%',padding:0,margin:0,display:'none'}} 
     label='shop' form_stuff={form_stuff} defaultValue={vals?.shop} readOnly />
+    <FormInput
+    styles={{ width: '80%', padding: 0, margin: 0, display: 'none' }}
+    label='id' form_stuff={form_stuff} defaultValue={vals?.id} readOnly />
     <div className='w-full flex  flex-wrap items-center justify-center'>
     <FormInput label='year' form_stuff={form_stuff} defaultValue={period.curr_year} valueAsNumber/>
     <FormInput label='month' form_stuff={form_stuff} defaultValue={period.curr_month} valueAsNumber/>
+    
     <FormInput label='elec_readings' form_stuff={form_stuff} 
-    defaultValue={vals?.elec_readings} valueAsNumber/>
+    defaultValue={vals?.elec_readings??0} valueAsNumber/>
   
     <FormInput label='water_readings' form_stuff={form_stuff} 
-    defaultValue={vals?.water_readings} valueAsNumber/>
+    defaultValue={vals?.water_readings??0} valueAsNumber/>
    </div>
+
      <FormButton form_stuff={form_stuff}/>
     </form>
     }
@@ -160,7 +165,7 @@ export const FormInput: React.FC<FormInputProps> = (
           {label}
         </label>
         <input
-          style={{borderColor: isError(errors)? "red": ""}}
+          style={{borderColor: isError(errors)? "red": "",...styles}}
           className="w-[90%] p-1 border border-black 
       dark:border-white h-10 text-base rounded-sm   dark:bg-slate-700
         focus:border-2 dark:focus:border-4 focus:border-purple-700 dark:focus:border-purple-600 "
@@ -217,8 +222,8 @@ setMode:React.Dispatch<React.SetStateAction<ModeType>>
 
 export const ShopModeSelect: React.FC<ShopModeSelectProps> = ({setMode}) => {
 const options = [
-{ value: "add", label: "Edit the readings" },
-{ value: "pre_add", label: "Add for next month", },
+{ value: "update", label: "Edit the readings" },
+{ value: "new", label: "Add for next month", },
 ];
 return (
   <div
@@ -227,16 +232,17 @@ className="w-full h-full flex flex-col justify-center items-center
   >
         <div className=" w-full flex flex-col justify-center items-center">
             <div className=" w-[90%] p-2
-            bg-red-200 border-2 border-red-800 text-red-800  rounded-xl">
-                This month's readng for this shop alredy exist, do you want to 
+            bg-red-100 border-2 border-red-800 text-red-900  rounded-xl">
+                This month's readngs for this shop already exist,
+                 do you want to 
             </div>
 
-      <div className="p-2 rounded-full w-full">
+      <div className="p-2 rounded-full w-[90%]">
         <Select
           options={options}
           defaultValue={options[0]}
           // @ts-expect-error
-          onChange={(e) =>setMode(e?.value ?? "add")}
+          onChange={(e) =>setMode(e?.value ?? "new")}
         />
       </div>
     </div>

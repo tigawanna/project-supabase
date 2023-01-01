@@ -48,6 +48,7 @@ export interface ShopBills {
 }
 
 export interface RequiredBillFields {
+  id?:string
   shop: string;
   elec_readings: number;
   water_readings: number;

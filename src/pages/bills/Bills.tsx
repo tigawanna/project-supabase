@@ -16,7 +16,7 @@ export interface PeriodType {
   curr_year: number;
   prev_year: number;
 }
-export type ModeType = "view" | "new" | "pre_add";
+export type ModeType = "view" | "new" | "pre_add" |"update";
 
 export const Bills: React.FC<BillsProps> = ({user,}) => {
   const date = new Date();

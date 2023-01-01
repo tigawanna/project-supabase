@@ -223,3 +223,30 @@ export const saveBills = async (
       prev_year: this_year,
     };
   };
+
+  export const carousselFormSaveBills = async (
+    values:RequiredBillFields,
+    mode: ModeType
+  ) => {
+if(mode === "new"){
+  const item: RequiredBillFields = {
+      shop: values.shop,
+      elec_readings:values.elec_readings,
+      water_readings:values.water_readings,
+      month:values.month,
+      year:values.year,
+      };
+  return await addBills(item);
+}
+if (mode === "update") {
+  const item: RequiredBillFields = {
+    id:values.id,
+    shop: values.shop,
+    elec_readings: values.elec_readings,
+    water_readings: values.water_readings,
+    month: values.month,
+    year: values.year,
+  };
+  return await updateTable({row_id:item.id as string,table:"bills",new_values:item});
+}
+  };
