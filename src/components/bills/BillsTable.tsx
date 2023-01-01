@@ -1,8 +1,6 @@
 import { UseMutationResult, useMutation, UseQueryResult } from '@tanstack/react-query';
 import React from 'react'
-import useMeasure from 'react-use-measure';
 import { concatErrors } from '../../shared/utils/utils';
-import { updateTable } from '../../supa/mutations';
 import { useNavigate } from 'react-router-dom';
 import { FaPrint, FaRegEdit } from 'react-icons/fa';
 import { ReactModalWrapper } from '../../shared/extra/ReactModalWrapper';
@@ -54,8 +52,6 @@ export const BillsTable: React.FC<BillsTableProps> = ({query,period,setPeriod,mo
     
 
     const navigate = useNavigate();
-    const date = new Date()
-    const [ref, top] = useMeasure();
     const [openModal, setOpenModal] = React.useState(false)
     const [error, setError] = React.useState({ name: "", error: "" });
     const [mainH, setMainH] = React.useState(window?.innerHeight ?? 0);
@@ -93,8 +89,7 @@ export const BillsTable: React.FC<BillsTableProps> = ({query,period,setPeriod,mo
         })
 
 
-    const topHeight = (top.height / mainH) * 100;
-    const bottomHeight = 100 - (topHeight);
+
 
     const validate = (prev: BillsT, current: BillsT) => {
       setError({ name: "", error: "" });
