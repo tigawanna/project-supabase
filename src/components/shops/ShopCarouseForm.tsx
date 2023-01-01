@@ -51,18 +51,12 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
             throw e
         }
     },
-        {
-            onSettled: () => {
-                //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
-                // setOpenModal(false)
-            },
-            onError: (err: any) => {
-                console.log("errror adding bill in ", err.data)
-                setError({ name: "main", error: concatErrors(err) })
-            }
-
-
-        })
+    {
+    onError: (err: any) => {
+    console.log("errror adding bill in ", err.data)
+    setError({ name: "main", error: concatErrors(err) })
+   }
+    })
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
         console.log("handle submit data === ",data)
         billMutation.mutate(data)
