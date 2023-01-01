@@ -46,7 +46,7 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
     { value: "add", label: "Add new" },
     {value: "pre_add",label: "Add for next month",},
   ];
-  console.log("bills ==>>",query.data)
+  // console.log("bills ==>>",query.data)
   // console.log("updte mutation  === ", updateBillMutation)
   return (
     <div className="w-full h-full flex flex-col items-center ">

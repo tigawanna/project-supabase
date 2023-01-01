@@ -24,7 +24,7 @@ import { monthValues } from './../backup/backup1';
 
     }
 
-  export const addBills=async(new_bill:NewBillT)=>{
+export const addBills=async(new_bill:NewBillT)=>{
  console.log("adding bills === ",new_bill)
     try{
         const { data, error } = await supabase

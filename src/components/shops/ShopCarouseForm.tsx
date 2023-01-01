@@ -10,6 +10,8 @@ import { Loading } from './../../shared/extra/Loading';
 import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
 import { computePeriod } from '../bills/utils';
 import { ModeType } from '../../pages/bills/Bills';
+import { computeShopCarouselPeriod } from './../bills/utils';
+import Select  from 'react-select';
 
 
 interface ShopsCarouselFormProps {
@@ -38,7 +40,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
     const form_stuff = useForm<RequiredBillFields>();
 
     const [period, setPeriod] = React.useState(() => computePeriod(date, mode));
-    React.useEffect(() => { setPeriod(computePeriod(date, mode))}, [mode]);
+    React.useEffect(() => { setPeriod(computeShopCarouselPeriod(date, mode))}, [mode]);
 
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
         console.log(data)
@@ -51,6 +53,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
         if(data){
             form_stuff.reset()
             setVals(data[0])
+            setMode('new')
         }
       },[shop,data])
       
@@ -84,8 +87,9 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
      }
     </div>
 </div>
-<div className='w-full flex md:flex-row flex-col items-center '>
-{data&&data[0].month === period.curr_month?"This month's bills seem o have already been enterd":null}
+<div className='w-full  '>
+{data&&data[0].month === period.curr_month?<ShopModeSelect setMode={setMode}/>:
+null}
 </div>
    <QueryStateWrapper
    data={query.data}
@@ -206,3 +210,36 @@ export const FormButton: React.FC<FormButtonProps> = ({ form_stuff }) => {
     </button>
   );
 };
+
+interface ShopModeSelectProps {
+setMode:React.Dispatch<React.SetStateAction<ModeType>>
+}
+
+export const ShopModeSelect: React.FC<ShopModeSelectProps> = ({setMode}) => {
+const options = [
+{ value: "add", label: "Edit the readings" },
+{ value: "pre_add", label: "Add for next month", },
+];
+return (
+  <div
+className="w-full h-full flex flex-col justify-center items-center
+ rounded-xl"
+  >
+        <div className=" w-full flex flex-col justify-center items-center">
+            <div className=" w-[90%] p-2
+            bg-red-200 border-2 border-red-800 text-red-800  rounded-xl">
+                This month's readng for this shop alredy exist, do you want to 
+            </div>
+
+      <div className="p-2 rounded-full w-full">
+        <Select
+          options={options}
+          defaultValue={options[0]}
+          // @ts-expect-error
+          onChange={(e) =>setMode(e?.value ?? "add")}
+        />
+      </div>
+    </div>
+  </div>
+);
+}

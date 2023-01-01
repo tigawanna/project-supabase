@@ -182,3 +182,44 @@ export const saveBills = async (
       prev_year: this_year,
     };
   };
+
+
+  export const computeShopCarouselPeriod = (date: Date,mode: ModeType) => {
+      const this_month = date.getMonth() + 1;
+      const this_year = date.getFullYear();
+
+    if (mode === "pre_add") {
+      if (this_month === 12) {
+        console.log("january new entry mode ");
+        return {
+          curr_month: 1,
+          prev_month: 12,
+          curr_year: this_year + 1,
+          prev_year: this_year,
+        };
+      }
+      console.log("new entry mode ");
+
+      return {
+        curr_month: this_month + 1,
+        prev_month: this_month,
+        curr_year: this_year,
+        prev_year: this_year,
+      };
+    }
+      if (this_month === 1) {
+        console.log("january new entry mode ");
+        return {
+          curr_month: 1,
+          prev_month: 12,
+          curr_year: this_year,
+          prev_year: this_year -1 ,
+        };
+      }
+    return {
+      curr_month: this_month,
+      prev_month: this_month - 1 ,
+      curr_year: this_year,
+      prev_year: this_year,
+    };
+  };
