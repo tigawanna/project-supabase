@@ -224,10 +224,9 @@ export const saveBills = async (
     };
   };
 
-  export const carousselFormSaveBills = async (
-    values:RequiredBillFields,
-    mode: ModeType
-  ) => {
+  export const carousselFormSaveBills = async (values:RequiredBillFields,mode: ModeType) => {
+    
+  console.log("values   mode == ",values,mode)
 if(mode === "new"){
   const item: RequiredBillFields = {
       shop: values.shop,

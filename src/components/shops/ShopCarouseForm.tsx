@@ -1,17 +1,18 @@
 
 import React, { ChangeEvent } from 'react'
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { getMostPreviousBill } from '../../supa/operations';
 import { useForm } from "react-hook-form";
 import { RequiredBillFields, ShopsType } from './../../supa/query-types';
 import { UseFormReturn } from 'react-hook-form/dist/types';
 import { Loading } from './../../shared/extra/Loading';
 import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
-import { computePeriod } from '../bills/utils';
+import { carousselFormSaveBills, computePeriod } from '../bills/utils';
 import { ModeType } from '../../pages/bills/Bills';
 import { computeShopCarouselPeriod } from './../bills/utils';
 import Select  from 'react-select';
+import { concatErrors } from './../../shared/utils/utils';
 
 
 interface ShopsCarouselFormProps {
@@ -36,14 +37,35 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
     ['latest-bill', shop], () => getMostPreviousBill(shop?.id as string))
     const date = new Date();
     const [mode, setMode] = React.useState<ModeType>("new");
+    const [error, setError] = React.useState({name:"",error:""});
 
     const form_stuff = useForm<RequiredBillFields>();
 
     const [period, setPeriod] = React.useState(() => computePeriod(date, mode));
     React.useEffect(() => { setPeriod(computeShopCarouselPeriod(date, mode))}, [mode]);
+    const billMutation = useMutation(async (vals:RequiredBillFields) => {
+        try {
+            return await carousselFormSaveBills(vals,mode)
+        }
+        catch (e) {
+            throw e
+        }
+    },
+        {
+            onSettled: () => {
+                //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
+                // setOpenModal(false)
+            },
+            onError: (err: any) => {
+                console.log("errror adding bill in ", err.data)
+                setError({ name: "main", error: concatErrors(err) })
+            }
 
+
+        })
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
         console.log("handle submit data === ",data)
+        billMutation.mutate(data)
     };
     
     const data = query?.data
@@ -53,7 +75,12 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
         if(data){
             form_stuff.reset()
             setVals(data[0])
-            setMode('new')
+            if (data && data[0].month === period.curr_month){
+                setMode('update')
+            }else{
+                setMode('new')
+            }
+
         }
       },[shop,data])
       
@@ -121,6 +148,13 @@ null}
     </form>
     }
     </QueryStateWrapper>
+        <div className='w-[90%] flex  flex-col items-center justify-center'>
+            {error.name === "main" && error.error !== "" ?
+            <div className=" w-full p-2
+            bg-red-100 border-2 border-red-800 text-red-900  rounded-xl">
+           {error.error}
+            </div>:null}
+        </div>
         </div>
     );
 }
