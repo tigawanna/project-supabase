@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 import { useQuery } from '@tanstack/react-query';
 import { getMostPreviousBill } from '../../supa/operations';
@@ -29,49 +29,46 @@ interface BillsResponse {
 
 export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) => {
     const query = useQuery < BillsResponse[], unknown, BillsResponse[], (string | ShopsType | null | undefined)[]>(
-        ['latest-bill', shop], () => getMostPreviousBill(shop?.id as string))
+    ['latest-bill', shop], () => getMostPreviousBill(shop?.id as string))
  
     const form_stuff = useForm<RequiredBillFields>();
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
         console.log(data)
     };
     
-
-   const data = query?.data
+    const data = query?.data
     const [vals, setVals] = React.useState(data && data[0])
-
-    React.useEffect(() => {
+      React.useEffect(() => {
         if(data){
-            // console.log("updating valus === ",data[0])
             form_stuff.reset()
             setVals(data[0])
-
         }
       },[shop,data])
-
+      
 //    console.log("data === ",data)
     return (
  <div className='w-full h-full flex flex-col items-center  overflow-y-scroll'>
 
-<div className='w-full flex items-center '>
-    <div className='w-full flex flex-col justify-center p-2'>
-        <div className='text-2xl font-bold w-full'>{shop?.shop_number}</div>
-        <div className='text-xl font-bold w-full'>{shop?.tenants.tenant_name}</div>
-        <div className='font bold text-xl'>{shop?.order}</div>
+<div className='w-full flex md:flex-row flex-col items-center '>
+    <div className='w-full flex md:flex-col justify-center p-2'>
+        <div className=' md:text-2xl font-bold w-[30%]'>{shop?.shop_number}</div>
+        <div className='text-[10px] md:text-xl md:font-bold truncate w-[60%] '>{shop?.tenants.tenant_name}</div>
+        <div className='font bold text-xl w-[20%] '>{shop?.order}</div>
    </div>
     <div className='w-full flex flex-col justify-center p-2'>
      {
         data&&data.map((bill,idx)=>{
             return(
                 <div key={bill.id} 
-                className='w-full m-[2px] flex justify-center bg-slate-800  rounded-xl'>
-               
-                <div className='w-full'>month:  {bill.month}</div>
-                <div className='w-full'>year:  {bill.year}</div>
-                <div className='w-full '>elec: {bill.elec_readings}</div>
-                <div className='w-full'>water:  {bill.water_readings}</div>
-               
-                </div>
+                className='w-full m-1 px-1 p-[1px] md:py-1 md:px-2 text-[9px] 
+                md:text-[14px] gap-[1px]
+                flex justify-center bg-slate-800  rounded-xl'>
+                <div className='w-full'>mo:{bill.month}</div>
+                <div className='w-full'>yr:{bill.year}</div>
+                <div className='w-full '>elec:{bill.elec_readings}</div>
+                <div>{ }</div>
+                <div className='w-full'>wtr:{bill.water_readings}</div>
+               </div>
             )
         })
      }
@@ -92,8 +89,11 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
     <div className='w-full flex  flex-wrap items-center justify-center'>
     <FormInput label='year' form_stuff={form_stuff} defaultValue={vals?.year} valueAsNumber/>
     <FormInput label='month' form_stuff={form_stuff} defaultValue={vals?.month} valueAsNumber/>
-    <FormInput label='elec_readings' form_stuff={form_stuff} defaultValue={vals?.elec_readings} valueAsNumber/>
-    <FormInput label='water_readings' form_stuff={form_stuff} defaultValue={vals?.water_readings} valueAsNumber/>
+    <FormInput label='elec_readings' form_stuff={form_stuff} 
+    defaultValue={vals?.elec_readings} valueAsNumber/>
+  
+    <FormInput label='water_readings' form_stuff={form_stuff} 
+    defaultValue={vals?.water_readings} valueAsNumber/>
    </div>
      <FormButton form_stuff={form_stuff}/>
     </form>
@@ -115,15 +115,25 @@ interface FormInputProps {
     styles?:React.CSSProperties
 }
 
+
 export const FormInput: React.FC<FormInputProps> = (
     { form_stuff, label, defaultValue,readOnly=false,valueAsNumber,styles }) => {
     const { register, formState: { errors } } = form_stuff
-
+    const [diff,setDiff] = React.useState(defaultValue)
     const isError = (err: typeof errors) => {
         if (err[label]) {
             return true
         }
         return false
+    }
+   const customHandleChange = (e:ChangeEvent<HTMLInputElement>)=>{
+        setDiff(e.target.value )
+    }
+    const calcDiff=()=>{
+        if(isNaN(parseInt(diff as string) - parseInt(defaultValue as string))){
+            return 0
+        }
+     return (parseInt(diff as string) - parseInt(defaultValue as string))
     }
     return (
       <div 
@@ -140,7 +150,12 @@ export const FormInput: React.FC<FormInputProps> = (
           defaultValue={defaultValue}
             readOnly={readOnly}
                 {...register(label, { valueAsNumber})}
+                onChange={customHandleChange}
         />
+        {(label ==="elec_readings" || label==="water_readings")? 
+        <div className='
+        w-[80%] bg-slate-800 rounded-lg flex items-center jusify-center m-1'>diff: { calcDiff() }</div>
+        :null}
         {isError(errors) ? (
           <div className="text-base  text-red-600">
             {errors[label]?.message}

@@ -46,7 +46,7 @@ export const ShopsCarousel: React.FC<ShopsCarouselProps> = ({ shops, index, setI
     return (
         <div 
 
-        className='w-full h-full bg-slate-700 rounded-xl
+        className='w-full h-full bg-slate-600 rounded-xl
        flex items-center justify-center'>
        <TheIcon
                 Icon={GrPrevious}
@@ -55,7 +55,7 @@ export const ShopsCarousel: React.FC<ShopsCarouselProps> = ({ shops, index, setI
             />
             <div 
             
-            className='w-full h-full bg-purple-700 rounded-xl text-xlfirst-letter:
+            className='w-full h-full bg-slate-900 rounded-xl text-xlfirst-letter:
            flex items-center justify-center
            '>
            <ShopsCarouselForm shop={shop}/>

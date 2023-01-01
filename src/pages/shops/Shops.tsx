@@ -32,6 +32,7 @@ return (
    isOpen={open}
    closeModal={() => setOpen(prev => !prev)}
    child={<ShopsCarousel index={idx} shops={shops} setIdx={setIdx}/>}
+   styles={{content_left:"10%",content_right:'10%'}}
 
 />
 <QueryStateWrapper
