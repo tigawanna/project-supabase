@@ -27,10 +27,19 @@ try{
 return await (await supabase.auth.getUser()).data.user; 
 }
 catch(e){
-    console.log("error getting user ",e)
+    //console.log("error getting user ",e)
 throw e
 }
-
-
 };
+
+
+export const logoutUser=async()=>{
+  try{
+    await supabase.auth.signOut()
+  }
+  catch(e){
+    console.log("errors signing out")
+  }
+
+}
 

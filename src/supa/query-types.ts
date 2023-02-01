@@ -55,3 +55,13 @@ export interface RequiredBillFields {
   month: number;
   year: number;
 }
+
+export interface BillsResponse {
+  id: string;
+  created_at: string;
+  shop: string;
+  elec_readings: number;
+  water_readings: number;
+  month: number;
+  year: number;
+}

@@ -21,7 +21,17 @@ export type ModeType = "view" | "new" | "pre_add" |"update";
 export const Bills: React.FC<BillsProps> = ({user,}) => {
   const date = new Date();
   const [mode, setMode] = React.useState<ModeType>("view");
-  const [period, setPeriod] = React.useState(() =>
+  const years = [
+    { value: "2020", label: "2020" },
+    { value: "2021", label: "2021" },
+    { value: "2022", label: "2022", },
+    { value: "2023", label: "2023" },
+    { value: "2024", label: "2024", },
+    { value: "2025", label: "2025", },
+  ];
+  const [year, setYear] = React.useState(date.getFullYear());
+
+ const [period, setPeriod] = React.useState(() =>
     computePeriod(date, mode)
   );
   React.useEffect(() => {
@@ -43,11 +53,16 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
   
   const options = [
     { value: "view", label: "View/Update" },
-    { value: "add", label: "Add new" },
+    { value: "nw", label: "Add new" },
     {value: "pre_add",label: "Add for next month",},
   ];
-  // console.log("bills ==>>",query.data)
-  // console.log("updte mutation  === ", updateBillMutation)
+  const defaultYear=(this_year:number)=>{
+     return years.filter(yr=>yr.value === this_year.toString())
+  }
+
+  // //console.log("bills ==>>",query.data)
+  // //console.log("updte mutation  === ", updateBillMutation)
+  //console.log("year === ",year)
   return (
     <div className="w-full h-full flex flex-col items-center ">
       <div className="w-full flex items-center justify-center  ">
@@ -69,13 +84,19 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
         </div>
       </div>
 
-      <div className="p-2 rounded-full fixed top-[8%] left-[5%] z-50 w-[15%]">
+      <div className="p-2 rounded-full flex gap-2  w-full fixed top-[8%] left-[5%] z-50">
       
       <Select
           options={options}
           defaultValue={options[0]}
           // @ts-expect-error
           onChange={(e) =>setMode(e?.value ?? "view")
+          }
+        />
+          <Select
+          options={years}
+          defaultValue={defaultYear(date.getFullYear())}
+          onChange={(e) =>setYear(parseInt(e?.value as string))
           }
         />
       </div>

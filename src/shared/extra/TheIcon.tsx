@@ -1,40 +1,37 @@
 import React from 'react'
-import { IconContext, IconType } from "react-icons";
-
-type MyProps = {
-  // using `interface` is also ok
+import { IconType } from 'react-icons';
+import { IconContext } from "react-icons/lib";
+interface TheIconProps {
   Icon: IconType;
   size?: string;
   color?: string;
-  iconstyle?:string;
+  iconstyle?: string;
   iconAction?: () => any;
-};
-type MyState = {
-  iconstyle: string;
-};
-export class TheIcon extends React.Component<MyProps, MyState> {
-   constructor(props:MyProps) {
-    super(props)
-    this.state = { iconstyle:this.props?.iconstyle?this.props?.iconstyle:"" };
-    this.clickAction = this.clickAction.bind(this); 
-    }
-    clickAction(){
-      if(this.props.iconAction){
-      // console.log("click action")
-      return this.props.iconAction()
-      }
-      return console.log("")
-      }
-     render() {
-    return (
-
-      <div>
-        <IconContext.Provider value={{ size:this.props.size??"",color:this.props.color??"",
-          className:this.state.iconstyle}}>
-            <this.props.Icon onClick={()=>this.clickAction()}/>
-        </IconContext.Provider>
-    
-      </div>
-    );
-  }
 }
+
+export const TheIcon = (
+  {
+    Icon,
+    color,
+    iconAction,
+    iconstyle,
+    size
+  }: TheIconProps
+) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    iconAction && iconAction()
+    // other logic for handling the icon's click event
+  }
+  return (
+    <IconContext.Provider value={{
+      size, color, className: iconstyle
+    }}>
+      <button type="button" onClick={handleClick}>
+        <Icon />
+      </button>
+
+    </IconContext.Provider>
+  );
+};
+

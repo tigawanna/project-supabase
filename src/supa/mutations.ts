@@ -25,7 +25,7 @@ import { monthValues } from './../backup/backup1';
     }
 
 export const addBills=async(new_bill:NewBillT)=>{
- console.log("adding bills === ",new_bill)
+ //console.log("adding bills === ",new_bill)
     try{
         const { data, error } = await supabase
 
@@ -33,10 +33,10 @@ export const addBills=async(new_bill:NewBillT)=>{
           .insert([new_bill])
           .select()
           if(error){
-            console.log("error == ",error)
+            //console.log("error == ",error)
             throw new Error(error.message)
           }
-          // console.log("data ==== >",data)
+          // //console.log("data ==== >",data)
           return data
 
     }catch(e){
@@ -48,7 +48,7 @@ export const addBills=async(new_bill:NewBillT)=>{
  export const updateShop = async (
    updated_shop: ShopUpdate,shop_id:string
  ) => {
-  console.log('updating shop === ',updated_shop,shop_id)
+  //console.log('updating shop === ',updated_shop,shop_id)
    try {
 
     const { data, error } = await supabase
@@ -58,10 +58,10 @@ export const addBills=async(new_bill:NewBillT)=>{
 
 
      if (error) {
-       console.log("error == ", error);
+       //console.log("error == ", error);
        throw new Error(error.message);
      }
-     console.log("data ==== >", data);
+     //console.log("data ==== >", data);
      return data;
    } catch (e) {
      throw e;
@@ -78,10 +78,10 @@ export const addBills=async(new_bill:NewBillT)=>{
        .select()
 
      if (error) {
-       console.log("error == ", error);
+       //console.log("error == ", error);
        throw new Error(error.message);
      }
-     console.log("data ==== >", data);
+     //console.log("data ==== >", data);
      return data;
    } catch (e) {
      throw e;

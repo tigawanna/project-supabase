@@ -30,13 +30,13 @@ function App() {
    const userQuery = useQuery(['user'],getUser)
   
   //  supabase.auth.onAuthStateChange((event, session) => {
-  //   console.log("auth state changed == ",event, session)
+  //   //console.log("auth state changed == ",event, session)
   // })
 
    const testmode = false
    const user = userQuery?.data as User | null| undefined
 
-  console.log("user ==== ",user)
+  //console.log("user ==== ",user)
   const router = createBrowserRouter([
     {
       path: '/',

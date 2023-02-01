@@ -16,7 +16,7 @@ export const QueryStateWrapper: React.FC<QueryStateProps> = (
         return (
             <div className="w-full h-screen flex items-center justify-center ">
                 <div className="w-[100%] h-full flex items-center justify-center  ">
-                   {loader?loader:<Loading size={80}/>}
+                   {loader?loader:<Loading/>}
                 </div>
             </div>
         );

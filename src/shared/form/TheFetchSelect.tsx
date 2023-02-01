@@ -19,7 +19,7 @@ export const TheFetchSelect: React.FC<FetchSelectProps> = ({setInput,form_option
       item:form_options.fetch_select_options?.default_value_to_save as string,
     })
   },[])
-//  console.log("args ,keyword.word",args,keyword.word)
+//  //console.log("args ,keyword.word",args,keyword.word)
 
   let query
  if (form_options?.queryFn) {
@@ -53,7 +53,7 @@ if (query?.error) {
   }
 
 const data = query?.data
-// console.log("data in fetch sellect === ",data)
+// //console.log("data in fetch sellect === ",data)
 return (
  <div className='w-full min-h-[150px] h-full cursor-pointer flex flex-col items-center justify-start '>
     <label className="font-bold  text-md  w-[90%] flex items-start">
@@ -77,7 +77,7 @@ return (
   }
     <div  className='w-[90%]  rounded-lg flex flex-wrap items-center justify-center overflow-scroll scroll-bar'>
       {data?.map((item: any, idx:number) => {
-        // console.log("item === ",item)
+        // //console.log("item === ",item)
          return (
           <div key={item[form_options?.fetch_select_options?.keyword_field as string] + idx}
             onClick={() => finishSearch(item)}

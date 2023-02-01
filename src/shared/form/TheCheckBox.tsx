@@ -31,12 +31,12 @@ const isError = () => {
 };
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(prev=>!prev);
-    // console.log("chages ---- ",event.target.id , event.target.checked)
+    // //console.log("chages ---- ",event.target.id , event.target.checked)
     setInput({ item_key: event.target.id, item: event.target.checked})
     
   };
 const value = input[item.field_name as keyof typeof input]
-// console.log("val  === ",input)
+// //console.log("val  === ",input)
 return (
   <div className="flex flex-col items-center justify-center w-full ">
     <label className="font-bold  text-md capitalize  w-[90%] flex items-start">

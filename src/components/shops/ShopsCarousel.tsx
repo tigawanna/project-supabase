@@ -58,7 +58,7 @@ export const ShopsCarousel: React.FC<ShopsCarouselProps> = ({ shops, index, setI
             className='w-full h-full bg-slate-900 rounded-xl text-xlfirst-letter:
            flex items-center justify-center
            '>
-           <ShopsCarouselForm shop={shop}/>
+           <ShopsCarouselForm shop={shop} moveRight={moveRight}/>
             </div>
                 <TheIcon
                 Icon={GrNext}

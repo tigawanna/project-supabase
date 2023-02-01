@@ -33,13 +33,13 @@ export const Test: React.FC<TestProps> = ({}) => {
         return null
 
     }catch (e) {
-        console.log("error ===> ", e)
+        //console.log("error ===> ", e)
         throw e
     }
 
     }
 const query = useQuery(['tenant',keyword],()=>getTenant({keyword,table:'tenants',column:'tenant_name'}))
-console.log("query.data  ",query.data)
+//console.log("query.data  ",query.data)
 
 return (
     <div  className=" w-[100%]  bg-purple-500">

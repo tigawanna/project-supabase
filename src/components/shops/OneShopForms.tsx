@@ -62,7 +62,7 @@ export const OneShopForm: React.FC<OneShopFormProps> = ({ shop_id }) => {
                 //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
             },
             onError: (err: any) => {
-                console.log("errror logging in ", err.data)
+                //console.log("errror logging in ", err.data)
                 setError({ name: "main", message: concatErrors(err) })
             }
         })
@@ -120,7 +120,7 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
     const validate = ({ input, setError }: Validate) => {
         const assertNotNull = () => {
             for (const item in input) {
-                console.log("input.item", input[item as keyof typeof input])
+                //console.log("input.item", input[item as keyof typeof input])
             }
         }
         setError({ name: "", message: "" })
@@ -172,7 +172,7 @@ export const EditShopForm: React.FC<EditShopFormProps> = ({ shop }) => {
                 //   queryClient.invalidateQueries(['shops-bills',shop_id as string]);
             },
             onError: (err: any) => {
-                console.log("errror logging in ", err.data)
+                //console.log("errror logging in ", err.data)
                 setError({ name: "main", message: concatErrors(err) })
             }
         })

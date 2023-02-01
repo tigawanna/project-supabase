@@ -20,7 +20,7 @@ export const gets=async()=>{
    return shops
   } 
   catch(e){
-    console.log("error fetching shops ==== ",e)
+    //console.log("error fetching shops ==== ",e)
    throw e
   } 
 
@@ -51,10 +51,7 @@ export const get_bills_rpc = async (
         }
         return data as BillFromRPC[];
       } catch (e) {
-        console.log(
-          "error fetching shops ==== ",
-          e
-        );
+        console.log("error fetching shops ==== ",e);
         throw e;
       }
     }; 
@@ -79,10 +76,7 @@ export const get_bills_rpc = async (
         }
         return shops;
       } catch (e) {
-        console.log(
-          "error fecthing shops === ",
-          e
-        );
+        console.log("error fecthing shops === ",e);
         throw e;
       }
     };
@@ -100,10 +94,7 @@ export const get_bills_rpc = async (
             }
             return shops;
           } catch (e) {
-            console.log(
-              "error fecthing shops === ",
-              e
-            );
+            console.log("error fecthing shops === ",e);
             throw e;
           }
         };
@@ -134,7 +125,7 @@ export const get_bills_rpc = async (
                 }
                 return null;
               } catch (e) {
-                console.log("error ===> ", e);
+                //console.log("error ===> ", e);
                 throw e;
               }
             };
@@ -155,8 +146,7 @@ export const get_bills_rpc = async (
           }
       return bills;
        }catch(e){
-        console.log(
-        "error fetching most recent bill === ",e);
+        console.log("error fetching most recent bill === ",e);
           throw e;
        }
         }

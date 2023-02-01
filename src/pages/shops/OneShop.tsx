@@ -88,7 +88,7 @@ const saveChanges = ((prev: BaseInput, current: BaseInput) => {
     updateMutation.mutate({prev,current})
 })
     const validate = (prev: BaseInput, current: BaseInput) => {
-        console.log("prev,curr  === ",prev,current)
+        //console.log("prev,curr  === ",prev,current)
 
         if (current.id === "") {
             setError({ name: "id", error: "valid id required" })

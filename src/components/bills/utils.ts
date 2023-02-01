@@ -15,7 +15,7 @@ export const saveBills = async (
     const {after_edit,before_edit} = values
  try {
    if (mode === "new") {
-     console.log("adding new bill", after_edit);
+     //console.log("adding new bill", after_edit);
      // payload is the alterd fields ,prev is the values before editing started ,we;re checking if the fields have changed
      if (
        before_edit.curr_elec !==
@@ -42,9 +42,7 @@ export const saveBills = async (
          after_edit.curr_water
      ) {
        if (this_month === 12) {
-         console.log(
-           `pre saving to janaury while still in december ${this_year}`
-         );
+
          const item: RequiredBillFields = {
            shop: after_edit.shop_id,
            elec_readings: after_edit.curr_elec,
@@ -55,11 +53,7 @@ export const saveBills = async (
          return await addBills(item);
        }
 
-       console.log(
-         `presaving to ${
-           this_month + 1
-         } ${this_year} `
-       );
+
        const item: RequiredBillFields = {
          shop: after_edit.shop_id,
          elec_readings: after_edit.curr_elec,
@@ -128,7 +122,7 @@ export const saveBills = async (
     const this_year = date.getFullYear();
     if (mode === "view") {
       if (this_month === 1) {
-        console.log("january view mode");
+        // //console.log("january view mode");
         return {
           curr_month: this_month,
           prev_month: 12,
@@ -136,7 +130,7 @@ export const saveBills = async (
           prev_year: this_year - 1,
         };
       }
-      console.log("not january view  mode ");
+      // //console.log("not january view  mode ");
       return {
         curr_month: this_month,
         prev_month: this_month - 1,
@@ -147,7 +141,7 @@ export const saveBills = async (
 
     if (mode === "new") {
       if (this_month === 1) {
-        console.log("january new entry mode ");
+        // //console.log("january new entry mode ");
         return {
           curr_month: 12,
           prev_month: 12,
@@ -155,7 +149,7 @@ export const saveBills = async (
           prev_year: this_year - 1,
         };
       }
-      console.log("new entry mode ");
+      // //console.log("new entry mode ");
 
       return {
         curr_month: this_month - 1,
@@ -166,7 +160,7 @@ export const saveBills = async (
     }
 
     if (mode === "pre_add") {
-      console.log("pre add   mode ");
+      // //console.log("pre add   mode ");
       return {
         curr_month: this_month,
         prev_month: this_month,
@@ -174,7 +168,7 @@ export const saveBills = async (
         prev_year: this_year,
       };
     }
-    console.log("default   mode ");
+    // //console.log("default   mode ");
     return {
       curr_month: this_month,
       prev_month: this_month - 1,
@@ -190,7 +184,7 @@ export const saveBills = async (
 
     if (mode === "pre_add") {
       if (this_month === 12) {
-        console.log("january new entry mode ");
+        //console.log("january new entry mode ");
         return {
           curr_month: 1,
           prev_month: 12,
@@ -198,7 +192,7 @@ export const saveBills = async (
           prev_year: this_year,
         };
       }
-      console.log("new entry mode ");
+      //console.log("new entry mode ");
 
       return {
         curr_month: this_month + 1,
@@ -208,7 +202,7 @@ export const saveBills = async (
       };
     }
       if (this_month === 1) {
-        console.log("january new entry mode ");
+        //console.log("january new entry mode ");
         return {
           curr_month: 1,
           prev_month: 12,
@@ -226,7 +220,7 @@ export const saveBills = async (
 
   export const carousselFormSaveBills = async (values:RequiredBillFields,mode: ModeType) => {
     
-  console.log("values   mode == ",values,mode)
+  //console.log("values   mode == ",values,mode)
 if(mode === "new"){
   const item: RequiredBillFields = {
       shop: values.shop,

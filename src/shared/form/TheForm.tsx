@@ -5,7 +5,6 @@ import { TheFileInput } from "./TheFileInput ";
 import { TheFetchSelect } from './TheFetchSelect';
 import { FormOptions, SetInput } from "./types";
 import { TheTextarea } from './TheTextArea';
-import { TheSearchSelect } from './TheSearchSelect';
 import { TheCountrySelect } from './TheCountrySelect';
 import { Loading } from "../extra/Loading";
 import { TheCheckBox } from "./TheCheckBox";
@@ -87,7 +86,7 @@ class TheForm extends React.Component<Props, State> {
    this.setState({
         input: { ...this.state.input, [event.target.id]: !event.target.checked },
       });
-      console.log(this.state.input)
+      //console.log(this.state.input)
     }
     this.setState({
       input: { ...this.state.input, [event.target.id]: value },
@@ -105,21 +104,21 @@ class TheForm extends React.Component<Props, State> {
  
 
     if (!this.isValid()) {
-      console.log("the error ", this.state.error);
+      //console.log("the error ", this.state.error);
     }
     else {
       try {
         this.setError({ name: "", message: "" });
         const formData = new FormData();
         this.props.fields.map((item)=>{
-          // console.log("item added to fromdata ",item.field_name, this.state.input[item.field_name])
+          // //console.log("item added to fromdata ",item.field_name, this.state.input[item.field_name])
           formData.append(item.field_name, this.state.input[item.field_name])
        })
         const result = await this.props.submitFn(formData);
-        // console.log("save result === ", result);
-        // console.log("A name was submitted: ", this.state.input);
+        // //console.log("save result === ", result);
+        // //console.log("A name was submitted: ", this.state.input);
       } catch (err: any) {
-        // console.log("error adding item", err.message);
+        // //console.log("error adding item", err.message);
         this.setError({ name: "main", message: err.message });
       }
 
@@ -128,8 +127,8 @@ class TheForm extends React.Component<Props, State> {
 
   render() {
 
-  // console.log("this.props.error === ",this.props.error)
-  //   console.log("this.state.error === ", this.state.error)
+  // //console.log("this.props.error === ",this.props.error)
+  //   //console.log("this.state.error === ", this.state.error)
     return (
       <div className="w-full h-full flex flex-col items-center justify-center
       overflow-y-scroll bg-slate-300 dark:bg-slate-900 
@@ -144,7 +143,7 @@ class TheForm extends React.Component<Props, State> {
             {this.props.form_title}</div>
           {
             this.props.fields && this.props.fields.map((item, index) => {
-          //  console.log("item input  == ",item)
+          //  //console.log("item input  == ",item)
             if(item.field_type === "select"){
               return (
                 <TheSelect
@@ -184,15 +183,7 @@ class TheForm extends React.Component<Props, State> {
                   // head={{collection:item.misc?.coll_name as string,prop:item.field_name+"."+item.filter_key}}
                   />)
               }
-              if (item.field_type === "searchselect") {
-                return (
-                  <TheSearchSelect
-                    key={index + item.field_name}
-                    form_options={item}
-                    setInput={this.setInput}
-                  
-                  />)
-              }
+
               if (item.field_type === "checkbox") {
                 return (
                   <TheCheckBox

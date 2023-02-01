@@ -4,7 +4,7 @@ import React, { ChangeEvent } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getMostPreviousBill } from '../../supa/operations';
 import { useForm } from "react-hook-form";
-import { RequiredBillFields, ShopsType } from './../../supa/query-types';
+import { BillsResponse, RequiredBillFields, ShopsType } from './../../supa/query-types';
 import { UseFormReturn } from 'react-hook-form/dist/types';
 import { Loading } from './../../shared/extra/Loading';
 import { QueryStateWrapper } from '../../shared/extra/QueryStateWrapper';
@@ -12,53 +12,56 @@ import { carousselFormSaveBills, computePeriod } from '../bills/utils';
 import { ModeType } from '../../pages/bills/Bills';
 import { computeShopCarouselPeriod } from './../bills/utils';
 import Select  from 'react-select';
-import { concatErrors } from './../../shared/utils/utils';
+import { concatErrors, syntheticDelay } from './../../shared/utils/utils';
+import { ReactModalWrapper } from './../../shared/extra/ReactModalWrapper';
 
 
 interface ShopsCarouselFormProps {
-    shop: ShopsType | null | undefined
-}
-
-interface BillsResponse {
-    id: string
-    created_at: string
-    shop: string
-    elec_readings: number
-    water_readings: number
-    month: number
-    year: number
+  shop: ShopsType | null | undefined
+  moveRight: () => void
 }
 
 
 
 
-export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) => {
+
+export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop,moveRight }) => {
     const query = useQuery < BillsResponse[], unknown, BillsResponse[], (string | ShopsType | null | undefined)[]>(
     ['latest-bill', shop], () => getMostPreviousBill(shop?.id as string))
-    const date = new Date();
+
     const [mode, setMode] = React.useState<ModeType>("new");
+   const [openModal, setOpenModal] = React.useState(false);
     const [error, setError] = React.useState({name:"",error:""});
 
     const form_stuff = useForm<RequiredBillFields>();
-
+  const date = new Date();
     const [period, setPeriod] = React.useState(() => computePeriod(date, mode));
+
     React.useEffect(() => { setPeriod(computeShopCarouselPeriod(date, mode))}, [mode]);
     const billMutation = useMutation(async (vals:RequiredBillFields) => {
         try {
-            return await carousselFormSaveBills(vals,mode)
+          return await carousselFormSaveBills(vals,mode)
         }
         catch (e) {
             throw e
         }
     },
+    
     {
+    onSuccess:async(data)=>{
+      setOpenModal(true)
+        moveRight()
+     },
+     onSettled:()=>{
+      setOpenModal(false)
+     } ,
     onError: (err: any) => {
-    console.log("errror adding bill in ", err.data)
+    //console.log("errror adding bill in ", err.data)
     setError({ name: "main", error: concatErrors(err) })
    }
     })
     const onSubmit = (data: RequiredBillFields, event?: React.BaseSyntheticEvent<object, any, any>) => {
-        console.log("handle submit data === ",data)
+        //console.log("handle submit data === ",data)
         billMutation.mutate(data)
     };
     
@@ -78,7 +81,7 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
         }
       },[shop,data])
       
-    // console.log("data === ", data && data[0])
+    // //console.log("data === ", data && data[0])
     return (
  <div className='w-full h-full flex flex-col items-center  overflow-y-scroll'>
 
@@ -108,17 +111,20 @@ export const ShopsCarouselForm: React.FC<ShopsCarouselFormProps> = ({ shop }) =>
      }
     </div>
 </div>
+
 <div className='w-full  '>
 {data&&data[0].month === period.curr_month?<ShopModeSelect setMode={setMode}/>:
 null}
 </div>
+
    <QueryStateWrapper
    data={query.data}
    isLoading={query.isLoading}
    isError={query.isError}
    error={query.error}
    >
-    {vals &&<form 
+    {vals &&
+    <form 
      className='w-full h-full flex  flex-col items-center justify-center gap-2'
     onSubmit={form_stuff.handleSubmit(onSubmit)}>
     <FormInput
@@ -138,17 +144,46 @@ null}
     defaultValue={vals?.water_readings??0} valueAsNumber/>
    </div>
 
-     <FormButton form_stuff={form_stuff}/>
+     <FormButton form_stuff={form_stuff} isSubmitting={billMutation.isLoading}/>
     </form>
     }
     </QueryStateWrapper>
-        <div className='w-[90%] flex  flex-col items-center justify-center'>
-            {error.name === "main" && error.error !== "" ?
-            <div className=" w-full p-2
+
+        <ReactModalWrapper
+          child={
+            <div className='w-full h-full flex flex-col items-center justify-center p-2'>
+              {error.error !== "" ?
+                <div className=" w-full p-2
             bg-red-100 border-2 border-red-800 text-red-900  rounded-xl">
-           {error.error}
-            </div>:null}
-        </div>
+                  {error.error}
+                </div> : null}
+              {billMutation.isSuccess ?
+                <div className='
+              w-full h-fitbg-green-100 text-green-900 border-green-900 border-2 rounded-xl'>
+                  <div className=' text-center  font-bold text-xl h-full w-full'>
+                    {billMutation.status}
+                  </div>
+
+                </div> : null
+              }
+            </div>
+          }
+          isOpen={openModal}
+          closeModal={() => setOpenModal(false)}
+          closeAfterDelay={3000}
+          styles={{
+            parent_top: "85%",
+            parent_bottom: "0%",
+            parent_left: "20%",
+            parent_right: "20%",
+            content_right: "0",
+            content_left: "0",
+            content_top: "0",
+            content_bottom: "0",
+          }}
+        />   
+
+
         </div>
     );
 }
@@ -168,23 +203,26 @@ interface FormInputProps {
 
 export const FormInput: React.FC<FormInputProps> = (
     { form_stuff, label, defaultValue,readOnly=false,valueAsNumber,styles }) => {
-    const { register, formState: { errors } } = form_stuff
-    const [diff,setDiff] = React.useState(defaultValue)
-    const isError = (err: typeof errors) => {
+  const { register, formState: { errors } } = form_stuff
+  const [diff,setDiff] = React.useState(defaultValue)
+  
+  const isError = (err: typeof errors) => {
         if (err[label]) {
             return true
         }
         return false
     }
-   const customHandleChange = (e:ChangeEvent<HTMLInputElement>)=>{
+  const customHandleChange = (e:ChangeEvent<HTMLInputElement>)=>{
         setDiff(e.target.value )
     }
-    const calcDiff=()=>{
+
+  const calcDiff=()=>{
         if(isNaN(parseInt(diff as string) - parseInt(defaultValue as string))){
             return 0
         }
-     return (parseInt(diff as string) - parseInt(defaultValue as string))
+  return (parseInt(diff as string) - parseInt(defaultValue as string))
     }
+
     return (
       <div 
       style={styles}
@@ -204,7 +242,8 @@ export const FormInput: React.FC<FormInputProps> = (
         />
         {(label ==="elec_readings" || label==="water_readings")? 
         <div className='
-        w-[80%] bg-slate-800 rounded-lg flex items-center jusify-center m-1'>diff: { calcDiff() }</div>
+        w-[80%] bg-slate-800 rounded-lg flex items-center jusify-center m-1'>
+          diff: { calcDiff() }</div>
         :null}
         {isError(errors) ? (
           <div className="text-base  text-red-600">
@@ -218,11 +257,13 @@ export const FormInput: React.FC<FormInputProps> = (
 
 interface FormButtonProps {
   form_stuff: UseFormReturn<RequiredBillFields,any>;
+  isSubmitting: boolean
 }
 
-export const FormButton: React.FC<FormButtonProps> = ({ form_stuff }) => {
+export const FormButton: React.FC<FormButtonProps> = ({ form_stuff,isSubmitting }) => {
   return (
     <button
+    disabled={isSubmitting}
     type={'submit'}
       className="p-2 w-[70%] md:w-[30%]
             border-2 dark:border border-slate-700 dark:border-slate-400 dark:bg-slate-800
@@ -231,8 +272,8 @@ export const FormButton: React.FC<FormButtonProps> = ({ form_stuff }) => {
             hover:shadow-lg dark:hover:shadow
             hover:scale-105"
     >
-      {form_stuff.formState.isSubmitting ? (
-        <div className="h-full w-[60%] flex justify-center items-center">
+      {isSubmitting ? (
+        <div className="w-[60%] flex justify-center items-center">
           <Loading />
         </div>
       ) : (

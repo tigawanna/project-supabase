@@ -6,18 +6,16 @@ import {
 import React from "react";
 import { concatErrors } from "../../shared/utils/utils";
 import { useNavigate } from "react-router-dom";
-import {
-  FaPrint,
-  FaRegEdit,
-} from "react-icons/fa";
-import { ReactModalWrapper } from "../../shared/extra/ReactModalWrapper";
-import { TheIcon } from "../../shared/extra/TheIcon";
-import { TheTable } from "../../shared/table";
+
 import { LoaderElipse } from "./../../shared/loaders/Loaders";
 import { BillFromRPC } from "./../../supa/query-types";
 import { ModeType } from "../../pages/bills/Bills";
 import { PeriodType } from "./../../pages/bills/Bills";
 import { saveBills } from "./utils";
+import { FaPrint, FaRegEdit } from "react-icons/fa";
+import { ReactModalWrapper } from "../../shared/extra/ReactModalWrapper";
+import { TheIcon } from "../../shared/extra/TheIcon";
+import { TheTable } from "../../shared/table";
 
 interface BillsTableProps {
   query: UseQueryResult<BillFromRPC[], unknown>;
@@ -56,27 +54,35 @@ export interface UpdateMutationProps {
   after_edit: BillsT;
   before_edit: BillsT;
 }
-export const BillsTable: React.FC<
-  BillsTableProps
-> = ({ query, period, setPeriod, mode }) => {
+
+interface Header<T>{
+  name: string;
+  prop: keyof T;
+  type: string;
+  editable: boolean;
+} []
+export const BillsTable: React.FC<BillsTableProps> = ({ query, period, setPeriod, mode }) => {
   const navigate = useNavigate();
-  const [openModal, setOpenModal] =
-    React.useState(false);
+  const [openModal, setOpenModal] = React.useState(false);
   const [error, setError] = React.useState({
     name: "",
     error: "",
   });
-  const [mainH, setMainH] = React.useState(
-    window?.innerHeight ?? 0
-  );
-  const [update, setUpdate] =
-    React.useState(true);
 
-  const header = [
+  const [update, setUpdate] = React.useState(true);
+
+  const header:Header<BillsT>[] = [
     {
       name: "SHOP ID",
       prop: "shop_id",
       type: "id",
+      editable: false,
+    },
+
+    {
+      name: "SHOP No",
+      prop: "shop_number",
+      type: "text",
       editable: false,
     },
     {
@@ -98,14 +104,26 @@ export const BillsTable: React.FC<
       editable: true,
     },
     {
+      name: "DIFF",
+      prop: "water_diff",
+      type: "number",
+      editable: true,
+    },
+    {
       name: "PREV EL",
       prop: "prev_elec",
       type: "number",
       editable: true,
     },
     {
-      name: "CURR EL",
+      name: "CUR EL",
       prop: "curr_elec",
+      type: "number",
+      editable: true,
+    },
+    {
+      name: "DIFF",
+      prop: "elec_diff",
       type: "number",
       editable: true,
     },
@@ -132,10 +150,7 @@ export const BillsTable: React.FC<
         setOpenModal(false);
       },
       onError: (err: any) => {
-        console.log(
-          "errror logging in ",
-          err.data
-        );
+        console.log( "errror logging in ",err.data);
         setError({
           name: "main",
           error: concatErrors(err),
@@ -275,7 +290,7 @@ export interface ResponseData {
 const BillsSaving: React.FC<BillsSavingProps> = ({
   updateBillMutation,
 }) => {
-  // console.log("updte mutation  === ",updateBillMutation)
+  // //console.log("updte mutation  === ",updateBillMutation)
   const data =
     updateBillMutation.data &&
     (updateBillMutation.data[0] as ResponseData);

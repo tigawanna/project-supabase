@@ -22,7 +22,7 @@ export const TheCountrySelect: React.FC<CountrySelectProps> = ({setInput,form_op
         if (keyword.word !== "" && keyword.word.length > 1) {
           return data.filter((item) => item.name.common.toLowerCase().includes(keyword.word.toLowerCase()))
         }
-        // console.log("data", data)
+        // //console.log("data", data)
         return data
       },
       enabled: keyword.word.length > 1
@@ -43,7 +43,7 @@ const finishSearch=(item:Country)=>{
   }
 }
 
-// console.log(" form_options ",form_options)
+// //console.log(" form_options ",form_options)
 
 if (query?.error) {
     return (

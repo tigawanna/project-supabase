@@ -9,8 +9,9 @@ import {
 import { Link } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaUserCircle } from "react-icons/fa";
-import { Tenants } from './../../pages/tenants/Tenants';
 import { TheIcon } from "../../shared/extra/TheIcon";
+import { ReactModalWrapper } from "../../shared/extra/ReactModalWrapper";
+import { ProfileMenu } from "./ProfileMenu";
 
 interface ToolbarProps {
   user: User | null | undefined;
@@ -22,14 +23,11 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   const theme = useTheme();
   const nextTheme =
     theme.theme === "dark" ? "light" : "dark";
-  const mode =
-    theme.theme === "dark"
-      ? BsSunFill
-      : BsFillMoonFill;
+  const mode =theme.theme === "dark"? BsSunFill: BsFillMoonFill;
   const toggle = () => {
     theme.setTheme(nextTheme);
   };
-  const [open, setOpen] = React.useState(false);
+  const [open, setIsOpen] = React.useState(false);
   const avatar = user?.user_metadata?.avatar_url
 
   return (
@@ -80,25 +78,45 @@ export const Toolbar: React.FC<ToolbarProps> = ({
       </div>
       
       <div className="w-fit h-full flex justify-end items-center">
-      <div className="  rounded-md  flex justify-center items-center
-              w-16  h-full  aspect-square">
+      <button 
+      type="button"
+      onClick={()=>setIsOpen(true)}
+      className="  rounded-md  flex justify-center items-center
+         w-16  h-full  aspect-square">
           {!user ? (
-            <Link to="/auth">
               <TheIcon
                 Icon={FaUserCircle}
                 size={"25"}
                 color={""}
               />
-            </Link>
+  
           ) : (
             <img
               src={avatar}
               alt={""}
               className="rounded-[50%] hover:rounded-sm border-2 max-h-[40px] aspect-square"
-              onClick={() => setOpen(true)}
+              // onClick={() => setOpen(true)}
             />
           )}
-        </div>
+        </button>
+
+        <ReactModalWrapper
+          child={
+            <ProfileMenu user={user} setIsOpen={setIsOpen} />}
+          closeModal={() => setIsOpen(false)}
+          isOpen={open}
+          styles={{
+            overlay_top: '0%',
+            overlay_right: '0%',
+            overlay_left: '0%',
+            overlay_bottom: '0%',
+            content_bottom: '20%',
+            content_right: '0%',
+            content_left: '60%',
+            content_top: '0%'
+
+          }}
+        />
       </div>
 
     </div>

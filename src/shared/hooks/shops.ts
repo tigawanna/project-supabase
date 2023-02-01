@@ -9,7 +9,7 @@ return useQuery<ShopsType[] | null,unknown,ShopsType[] | null,string[]>(["shops"
 get_shops,
 {
     select:(data)=>{
-        // console.log("data ,data",data)
+        // //console.log("data ,data",data)
      if(data && params){
         return data?.filter((item) => item.id === params?.shop??"")
       }
