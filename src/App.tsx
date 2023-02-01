@@ -40,7 +40,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <RootLayout user={user} test_mode={true}/>,
+      element: <RootLayout user={user} test_mode={testmode}/>,
       // loader:userLoader(queryClient),
       // errorElement: <ErrorPage />,
       children: [

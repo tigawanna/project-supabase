@@ -20,9 +20,10 @@ return (
  <div className='w-full h-full flex items-center justify-center'>
 <button 
 onClick={()=>signInWith()}
-className='p-5 flex flex-col items-center justify-center border-2 rounded-lg hover:scale-105'>
-<div>SIGN IN WITH GOOGLE</div>
+className='p-2  gap-3 flex  items-center justify-center border-2 rounded-lg hover:scale-105 bg-slate-800'>
+
 <TheIcon Icon={FcGoogle} size='40'/>
+    <div className='text-lg font-bold '>Sign In</div>
 </button>
  </div>
 );
