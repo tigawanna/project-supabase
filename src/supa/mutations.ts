@@ -1,6 +1,6 @@
 
 import { supabase } from './config';
-import { monthValues } from './../backup/backup1';
+
 
     interface NewBillT {
       shop: string;
