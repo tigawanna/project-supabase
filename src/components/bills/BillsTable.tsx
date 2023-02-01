@@ -199,12 +199,11 @@ export const BillsTable: React.FC<BillsTableProps> = ({ query, period, setPeriod
           }
           isOpen={openModal}
           closeModal={() => setOpenModal(false)}
-          closeAfterDelay={3000}
           styles={{
-            parent_top: "70%",
-            parent_bottom: "10%",
-            parent_left: "2%",
-            parent_right: "50%",
+            overlay_top: "70%",
+            overlay_bottom: "10%",
+            overlay_left: "2%",
+            overlay_right: "50%",
             content_right: "0",
             content_left: "0",
             content_top: "0",

@@ -170,12 +170,11 @@ null}
           }
           isOpen={openModal}
           closeModal={() => setOpenModal(false)}
-          closeAfterDelay={3000}
           styles={{
-            parent_top: "85%",
-            parent_bottom: "0%",
-            parent_left: "20%",
-            parent_right: "20%",
+            overlay_top: "85%",
+            overlay_bottom: "0%",
+            overlay_left: "20%",
+            overlay_right: "20%",
             content_right: "0",
             content_left: "0",
             content_top: "0",
