@@ -72,12 +72,12 @@ export const BillsTable: React.FC<BillsTableProps> = ({ query, period, setPeriod
   const [update, setUpdate] = React.useState(true);
 
   const header:Header<BillsT>[] = [
-    {
-      name: "SHOP ID",
-      prop: "shop_id",
-      type: "id",
-      editable: false,
-    },
+    // {
+    //   name: "SHOP ID",
+    //   prop: "shop_id",
+    //   type: "id",
+    //   editable: false,
+    // },
 
     {
       name: "SHOP No",
@@ -159,10 +159,7 @@ export const BillsTable: React.FC<BillsTableProps> = ({ query, period, setPeriod
     }
   );
 
-  const validate = (
-    prev: BillsT,
-    current: BillsT
-  ) => {
+  const validate = (prev: BillsT,current: BillsT) => {
     setError({ name: "", error: "" });
     return true;
   };
@@ -258,10 +255,10 @@ export const BillsTable: React.FC<BillsTableProps> = ({ query, period, setPeriod
 
           <div className="p-2  min-w-20"></div>
           <div className="p-2 w-full fixed bottom-0 bg-slate-600">
-            <BillsPeriodPicker
+            {/* <BillsPeriodPicker
               period={period}
               setPeriod={setPeriod}
-            />
+            /> */}
           </div>
         </div>
       </div>

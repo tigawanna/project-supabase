@@ -114,10 +114,35 @@ export const saveBills = async (
 };
 
 
-  export const computePeriod = (
-    date: Date,
-    mode: ModeType
-  ) => {
+interface PeriodType{
+ month:number;
+ year:number
+}
+export const calcPeriod=({month,year}:PeriodType)=>{
+if(month === 1){
+  return {
+    curr_month: month,
+    prev_month: 12,
+    curr_year: year,
+    prev_year: year - 1
+}
+}
+
+return {
+    curr_month: month,
+    prev_month: month - 1,
+    curr_year: year,
+    prev_year: year
+}
+
+
+}
+  
+
+
+
+
+export const computePeriod = (date: Date,mode: ModeType) => {
     const this_month = date.getMonth() + 1;
     const this_year = date.getFullYear();
     if (mode === "view") {

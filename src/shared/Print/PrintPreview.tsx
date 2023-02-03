@@ -26,7 +26,8 @@ export const PrintPreview = ({user}:PrintPreviewTypes) => {
     <div>
       <ReactToPrint
 
-        trigger={() => <button className='p-2 bg-slate-600 text-white fixed top-[12%] left-[50%] z-50'><FaPrint/></button>}
+        trigger={() => <button className='p-2 bg-slate-600 text-white fixed top-[12%] left-[50%] z-50'>
+          <FaPrint/></button>}
         content={() => componentRef.current}
       />
       <PrintThis

@@ -4,7 +4,7 @@ import { get_bills_rpc } from "../../supa/operations";
 import { User } from "../../supa/user-types";
 import { BillsTable } from "../../components/bills/BillsTable";
 import Select from "react-select";
-import { computePeriod } from "../../components/bills/utils";
+import { calcPeriod, computePeriod } from "../../components/bills/utils";
 
 interface BillsProps {
   user?: User | null;
@@ -29,19 +29,40 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
     { value: "2024", label: "2024", },
     { value: "2025", label: "2025", },
   ];
+  const months = [
+    { label: "January", value: "1" },
+    { label: "February", value: "2" },
+    { label: "March", value: "3", },
+    { label: "April", value: "4" },
+    { label: "May", value: "5", },
+    { label: "June", value: "6", },
+    { label: "July", value: "7", },
+    { label: "August", value: "8", },
+    { label: "September", value: "9", },
+    { label: "October", value: "10", },
+    { label: "November", value: "11", },
+    { label: "December", value: "12", },
+  ];
   const [year, setYear] = React.useState(date.getFullYear());
+  const [month, setMonth] = React.useState(date.getMonth()+1);
 
  const [period, setPeriod] = React.useState(() =>
-    computePeriod(date, mode)
+   calcPeriod({ month, year })
   );
   React.useEffect(() => {
-    setPeriod(computePeriod(date, mode));
-  }, [mode]);
+    // setPeriod(computePeriod(date, mode));
+    setPeriod(calcPeriod({month,year}));
+  }, [month,year]);
 
-
+// const hard_coded_period: typeof period = {
+//   curr_month:1,
+//     curr_year:2023,
+//     prev_month:2,
+//     prev_year:2023
+// }
   const query = useQuery(["billsfromrpc", period, mode],
     () => {
-      const { curr_month,prev_month,curr_year,prev_year} = period;
+      const { curr_month, prev_month, curr_year, prev_year } = period;
      return get_bills_rpc(
         curr_month,
         prev_month,
@@ -59,8 +80,12 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
   const defaultYear=(this_year:number)=>{
      return years.filter(yr=>yr.value === this_year.toString())
   }
+  const defaultMonth = (this_month: number) => {
+    return months.filter(yr => yr.value === this_month.toString())
+  }
 
-  // //console.log("bills ==>>",query.data)
+  console.log("period  === >>>> ",period)
+  console.log("bills ==>>",query.data)
   // //console.log("updte mutation  === ", updateBillMutation)
   //console.log("year === ",year)
   return (
@@ -97,6 +122,12 @@ export const Bills: React.FC<BillsProps> = ({user,}) => {
           options={years}
           defaultValue={defaultYear(date.getFullYear())}
           onChange={(e) =>setYear(parseInt(e?.value as string))
+          }
+        />
+        <Select
+          options={months}
+          defaultValue={defaultMonth(date.getMonth()+1)}
+          onChange={(e) => setMonth(parseInt(e?.value as string))
           }
         />
       </div>

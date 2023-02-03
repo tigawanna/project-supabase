@@ -32,14 +32,14 @@ export const ShopsCarousel: React.FC<ShopsCarouselProps> = ({ shops, index, setI
         }
         )
     }
-    useKeypress(['ArrowLeft', 'ArrowRight'], (event:any) => {
-        if (event.key === 'ArrowLeft') {
-        moveLeft()
-        } else {
-        moveRight();
-        }
-        // Do something when the user has pressed the Escape key
-    });
+    // useKeypress(['ArrowLeft', 'ArrowRight'], (event:any) => {
+    //     if (event.key === 'ArrowLeft') {
+    //     moveLeft()
+    //     } else {
+    //     moveRight();
+    //     }
+    //     // Do something when the user has pressed the Escape key
+    // });
 
 
     const shop = shops&&shops[index]
